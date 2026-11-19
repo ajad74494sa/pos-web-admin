@@ -137,6 +137,11 @@ class TransactionPaymentController extends Controller
      */
     public function store(Request $request)
     {
+        $request->validate([
+            'cheque_number' => ['required_if:method,cheque', 'nullable', 'string', 'max:255'],
+            'cheque_due_date' => ['required_if:method,cheque', 'nullable', 'string'],
+        ]);
+
         try {
             $business_id = $request->session()->get('user.business_id');
             $transaction_id = $request->input('transaction_id');
@@ -153,8 +158,10 @@ class TransactionPaymentController extends Controller
                     'card_transaction_number', 'card_type', 'card_month', 'card_year', 'card_security',
                     'cheque_number', 'bank_account_number', 'cheque_due_date', ]);
                 $inputs['paid_on'] = $this->transactionUtil->uf_date($request->input('paid_on'), true);
-                if (!empty($inputs['cheque_due_date'])) {
-                    $inputs['cheque_due_date'] = $this->transactionUtil->uf_date($inputs['cheque_due_date']);
+                if (array_key_exists('cheque_due_date', $inputs)) {
+                    $inputs['cheque_due_date'] = ! empty($inputs['cheque_due_date'])
+                        ? $this->transactionUtil->uf_date($inputs['cheque_due_date'])
+                        : null;
                 }
                 $inputs['transaction_id'] = $transaction->id;
                 $inputs['amount'] = $this->transactionUtil->num_uf($inputs['amount']);
@@ -320,6 +327,11 @@ class TransactionPaymentController extends Controller
             abort(403, 'Unauthorized action.');
         }
 
+        $request->validate([
+            'cheque_number' => ['required_if:method,cheque', 'nullable', 'string', 'max:255'],
+            'cheque_due_date' => ['required_if:method,cheque', 'nullable', 'string'],
+        ]);
+
         try {
             $business_id = request()->session()->get('user.business_id');
 
@@ -327,8 +339,10 @@ class TransactionPaymentController extends Controller
                 'card_transaction_number', 'card_type', 'card_month', 'card_year', 'card_security',
                 'cheque_number', 'bank_account_number', 'cheque_due_date', ]);
             $inputs['paid_on'] = $this->transactionUtil->uf_date($request->input('paid_on'), true);
-            if (!empty($inputs['cheque_due_date'])) {
-                $inputs['cheque_due_date'] = $this->transactionUtil->uf_date($inputs['cheque_due_date']);
+            if (array_key_exists('cheque_due_date', $inputs)) {
+                $inputs['cheque_due_date'] = ! empty($inputs['cheque_due_date'])
+                    ? $this->transactionUtil->uf_date($inputs['cheque_due_date'])
+                    : null;
             }
             $inputs['amount'] = $this->transactionUtil->num_uf($inputs['amount']);
 

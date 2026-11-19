@@ -48,8 +48,14 @@
 <div class="payment_details_div @if( $payment_line['method'] !== 'cheque' ) {{ 'hide' }} @endif" data-type="cheque" >
 	<div class="col-md-6">
 		<div class="form-group">
-			{!! Form::label("cheque_number_$row_index",__('lang_v1.cheque_no')) !!}
-			{!! Form::text("payment[$row_index][cheque_number]", $payment_line['cheque_number'], ['class' => 'form-control', 'placeholder' => __('lang_v1.cheque_no'), 'id' => "cheque_number_$row_index"]); !!}
+			{!! Form::label("cheque_number_$row_index", __('lang_v1.cheque_no') . ':*') !!}
+			{!! Form::text("payment[$row_index][cheque_number]", $payment_line['cheque_number'], ['class' => 'form-control cheque_number_field', 'placeholder' => __('lang_v1.cheque_no'), 'id' => "cheque_number_$row_index", 'required' => $payment_line['method'] === 'cheque']); !!}
+		</div>
+	</div>
+	<div class="col-md-6">
+		<div class="form-group">
+			{!! Form::label("cheque_due_date_$row_index", __('cheque::lang.due_date') . ':*') !!}
+			{!! Form::text("payment[$row_index][cheque_due_date]", $payment_line['cheque_due_date'] ?? '', ['class' => 'form-control date_picker cheque_due_date_field', 'placeholder' => __('cheque::lang.due_date'), 'id' => "cheque_due_date_$row_index", 'required' => $payment_line['method'] === 'cheque']); !!}
 		</div>
 	</div>
 </div>

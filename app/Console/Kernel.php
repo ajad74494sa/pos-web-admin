@@ -20,6 +20,7 @@ class Kernel extends ConsoleKernel
 
         if (in_array($env, ['live', 'production'], true)) {
             $schedule->command('pos:sendScheduledPaymentReminders')->everyMinute()->withoutOverlapping(120);
+            $schedule->command('disposable:update')->dailyAt('02:00')->withoutOverlapping(60);
         }
 
         if ($env === 'live') {

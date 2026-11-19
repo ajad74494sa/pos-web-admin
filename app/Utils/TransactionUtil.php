@@ -27,6 +27,7 @@ use App\VariationLocationDetails;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use App\CashRegister;
+use Illuminate\Support\Facades\Validator;
 
 
 class TransactionUtil extends Util
@@ -736,6 +737,8 @@ class TransactionUtil extends Util
                 $edit_ids[] = $payment['payment_id'];
                 $this->editPaymentLine($payment, $transaction, $uf_data);
             } else {
+                $this->validateChequePaymentDetails($payment);
+
                 $payment_amount = $uf_data ? $this->num_uf($payment['amount']) : $payment['amount'];
                 if ($payment['method'] == 'advance' && $advanceBalance !== null) {
                     if ($payment_amount > $advanceBalance) {
@@ -771,6 +774,9 @@ class TransactionUtil extends Util
                         'card_month' => isset($payment['card_month']) ? $payment['card_month'] : null,
                         'card_security' => isset($payment['card_security']) ? $payment['card_security'] : null,
                         'cheque_number' => isset($payment['cheque_number']) ? $payment['cheque_number'] : null,
+                        'cheque_due_date' => ! empty($payment['cheque_due_date'])
+                            ? ($uf_data ? $this->uf_date($payment['cheque_due_date']) : $payment['cheque_due_date'])
+                            : null,
                         'bank_account_number' => isset($payment['bank_account_number']) ? $payment['bank_account_number'] : null,
                         'note' => isset($payment['note']) ? $payment['note'] : null,
                         'paid_on' => $paid_on,
@@ -865,6 +871,8 @@ class TransactionUtil extends Util
                 $edit_ids[] = $payment['payment_id'];
                 $this->editPaymentLine($payment, $transaction, $uf_data);
             } else {
+                $this->validateChequePaymentDetails($payment);
+
                 $payment_amount = $uf_data ? $this->num_uf($payment['amount']) : $payment['amount'];
                 if ($payment['method'] == 'advance' && $payment_amount > $contact_balance) {
                     throw new AdvanceBalanceNotAvailable(__('lang_v1.required_advance_balance_not_available'));
@@ -897,6 +905,9 @@ class TransactionUtil extends Util
                         'card_month' => isset($payment['card_month']) ? $payment['card_month'] : null,
                         'card_security' => isset($payment['card_security']) ? $payment['card_security'] : null,
                         'cheque_number' => isset($payment['cheque_number']) ? $payment['cheque_number'] : null,
+                        'cheque_due_date' => ! empty($payment['cheque_due_date'])
+                            ? ($uf_data ? $this->uf_date($payment['cheque_due_date']) : $payment['cheque_due_date'])
+                            : null,
                         'bank_account_number' => isset($payment['bank_account_number']) ? $payment['bank_account_number'] : null,
                         'note' => isset($payment['note']) ? $payment['note'] : null,
                         'paid_on' => $paid_on,
@@ -982,6 +993,8 @@ class TransactionUtil extends Util
      */
     public function editPaymentLine($payment, $transaction = null, $uf_data = true)
     {
+        $this->validateChequePaymentDetails($payment);
+
         $payment_id = $payment['payment_id'];
         unset($payment['payment_id']);
 
@@ -994,6 +1007,12 @@ class TransactionUtil extends Util
 
         if (! empty($payment['paid_on'])) {
             $payment['paid_on'] = $uf_data ? $this->uf_date($payment['paid_on'], true) : $payment['paid_on'];
+        }
+
+        if (array_key_exists('cheque_due_date', $payment)) {
+            $payment['cheque_due_date'] = ! empty($payment['cheque_due_date']) && $uf_data
+                ? $this->uf_date($payment['cheque_due_date'])
+                : ($payment['cheque_due_date'] ?: null);
         }
 
         $denominations = ! empty($payment['denominations']) ? $payment['denominations'] : [];
@@ -1022,6 +1041,18 @@ class TransactionUtil extends Util
         event(new TransactionPaymentUpdated($tp, $transaction->type));
 
         return true;
+    }
+
+    private function validateChequePaymentDetails(array $payment)
+    {
+        if (($payment['method'] ?? null) !== 'cheque') {
+            return;
+        }
+
+        Validator::make($payment, [
+            'cheque_number' => ['required', 'string', 'max:255'],
+            'cheque_due_date' => ['required', 'string'],
+        ])->validate();
     }
 
     /**

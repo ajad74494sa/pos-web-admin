@@ -2,6 +2,283 @@
 @section('title', __('lang_v1.login'))
 @inject('request', 'Illuminate\Http\Request')
 @section('content')
+    <style>
+        .login-page-grid {
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) minmax(360px, 0.9fr);
+            max-width: 1080px;
+            min-height: 570px;
+            margin: 0 auto;
+            overflow: hidden;
+            border-radius: 28px;
+            background: #fff;
+            box-shadow: 0 28px 80px rgba(15, 23, 42, .24);
+        }
+
+        .login-side-panel {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            min-width: 0;
+            padding: 48px;
+            overflow: hidden;
+            color: #fff;
+            background: linear-gradient(145deg, #172554 0%, #3730a3 58%, #4f46e5 100%);
+        }
+
+        .login-side-panel::before,
+        .login-side-panel::after {
+            position: absolute;
+            content: "";
+            border: 1px solid rgba(255, 255, 255, .13);
+            border-radius: 50%;
+            pointer-events: none;
+        }
+
+        .login-side-panel::before {
+            width: 360px;
+            height: 360px;
+            right: -170px;
+            top: -150px;
+        }
+
+        .login-side-panel::after {
+            width: 260px;
+            height: 260px;
+            left: -150px;
+            bottom: -130px;
+        }
+
+        .login-brand-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .login-brand-logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 64px;
+            height: 64px;
+            margin-bottom: 32px;
+            border-radius: 18px;
+            background: rgba(255, 255, 255, .14);
+            box-shadow: inset 0 1px 0 rgba(255, 255, 255, .22);
+        }
+
+        .login-brand-logo img {
+            max-width: 46px;
+            max-height: 46px;
+            object-fit: contain;
+        }
+
+        .login-brand-content h2 {
+            margin: 0 0 12px;
+            color: #fff;
+            font-size: 32px;
+            font-weight: 700;
+            line-height: 1.2;
+        }
+
+        .login-brand-features {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 24px;
+        }
+
+        .login-brand-features span {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 9px 12px;
+            border: 1px solid rgba(255, 255, 255, .16);
+            border-radius: 999px;
+            background: rgba(255, 255, 255, .08);
+            color: rgba(255, 255, 255, .9);
+            font-size: 13px;
+        }
+
+        .login-brand-rule {
+            width: 52px;
+            height: 4px;
+            margin-top: 28px;
+            border-radius: 4px;
+            background: #a5b4fc;
+        }
+
+        .login-form-panel {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 0;
+            padding: 48px;
+        }
+
+        .login-form-card {
+            width: 100%;
+            max-width: 390px;
+            margin: 0;
+            padding: 0;
+            border: 0;
+            border-radius: 0;
+            background: transparent;
+            box-shadow: none;
+        }
+
+        .login-form-card h1 {
+            margin: 0;
+            color: #111827;
+            font-size: 28px;
+            font-weight: 700;
+            letter-spacing: -.025em;
+        }
+
+        .login-form-card h2 {
+            margin: 8px 0 28px;
+            color: #6b7280;
+            font-size: 14px;
+            font-weight: 400;
+        }
+
+        .login-form-card .form-group {
+            margin-bottom: 20px;
+        }
+
+        .login-form-card .tw-dw-label {
+            display: flex;
+            margin-bottom: 7px;
+        }
+
+        .login-form-card .tw-dw-label span,
+        .login-form-card .tw-dw-label a,
+        .login-form-card .tw-dw-label label {
+            color: #374151;
+        }
+
+        .login-form-card .tw-dw-form-control {
+            position: relative;
+            display: block;
+        }
+
+        .login-form-card input[type="text"],
+        .login-form-card input[type="password"] {
+            box-sizing: border-box;
+            width: 100%;
+            height: 48px;
+            padding: 0 14px;
+            border: 1px solid #d1d5db;
+            border-radius: 10px;
+            background: #fff;
+            transition: border-color .2s ease, box-shadow .2s ease;
+        }
+
+        .login-form-card input[type="text"]:focus,
+        .login-form-card input[type="password"]:focus {
+            border-color: #6366f1;
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, .14);
+        }
+
+        .login-form-card #password {
+            padding-inline-end: 48px;
+        }
+
+        .login-form-card #show_hide_icon {
+            top: 30px !important;
+            right: 10px !important;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 32px;
+            height: 32px;
+            padding: 0;
+            border: 0;
+            border-radius: 8px;
+            background: transparent;
+            cursor: pointer;
+        }
+
+        .login-form-card[dir="rtl"] #show_hide_icon {
+            right: auto !important;
+            left: 10px !important;
+        }
+
+        .login-form-card #show_hide_icon svg {
+            width: 20px;
+            height: 20px;
+            stroke: #6b7280;
+        }
+
+        .login-form-card .login-submit {
+            height: 48px;
+            margin-top: 8px;
+            border-radius: 10px;
+            box-shadow: 0 8px 18px rgba(79, 70, 229, .2);
+        }
+
+        .login-form-card .login-register-link {
+            margin-top: 20px;
+            color: #6b7280;
+            text-align: center;
+        }
+
+        .login-demo-panel {
+            max-height: 570px;
+            overflow-y: auto;
+        }
+
+        .login-demo-panel .box {
+            margin: 0;
+            border: 0;
+            border-radius: 16px;
+            box-shadow: none;
+        }
+
+        @media (max-width: 767px) {
+            .login-page-grid {
+                display: flex;
+                flex-direction: column;
+                min-height: 0;
+                margin: 0 12px;
+                border-radius: 20px;
+            }
+
+            .login-side-panel {
+                min-height: 170px;
+                padding: 24px;
+            }
+
+            .login-brand-logo {
+                width: 48px;
+                height: 48px;
+                margin-bottom: 16px;
+                border-radius: 14px;
+            }
+
+            .login-brand-content h2 {
+                font-size: 24px;
+            }
+
+            .login-brand-features {
+                gap: 8px;
+                margin-top: 16px;
+            }
+
+            .login-brand-features span {
+                padding: 7px 10px;
+                font-size: 12px;
+            }
+
+            .login-form-panel {
+                padding: 30px 24px;
+            }
+
+            .login-demo-panel {
+                max-height: none;
+            }
+        }
+    </style>
     @php
         $is_rtl = in_array(session()->get('user.language', config('app.locale')), config('constants.langs_rtl'));
         $username = old('username');
@@ -28,8 +305,8 @@
             }
         }
     @endphp
-    <div class="row">
-        <div class="col-md-4">
+    <div class="login-page-grid">
+        <div class="login-side-panel {{ config('app.env') == 'demo' ? 'login-demo-panel' : '' }}">
         @if (config('app.env') == 'demo')
         
                 @component('components.widget', [
@@ -101,20 +378,29 @@
                         <i class="fas fa-network-wired"></i>
                         Connector Module / API Documentation</a>
                 @endcomponent
-            
-            
-        
+        @else
+            <div class="login-brand-content">
+                <div class="login-brand-logo">
+                    <img src="{{ asset('img/logo-small.png') }}" alt="{{ config('app.name', 'POS') }}">
+                </div>
+                <h2>{{ config('app.name', 'ultimatePOS') }}</h2>
+                <div class="login-brand-features">
+                    <span><i class="fas fa-cash-register" aria-hidden="true"></i> @lang('sale.pos_sale')</span>
+                    <span><i class="fas fa-boxes" aria-hidden="true"></i> @lang('sale.products')</span>
+                    <span><i class="fas fa-chart-line" aria-hidden="true"></i> @lang('report.reports')</span>
+                </div>
+                <div class="login-brand-rule"></div>
+            </div>
     @endif
         </div>
-        <div class="col-md-4">
-            <div
-                class="tw-p-5 md:tw-p-6 tw-mb-4 tw-rounded-2xl tw-transition-all tw-duration-200 tw-bg-white tw-shadow-sm tw-ring-1 tw-ring-gray-200">
+        <div class="login-form-panel">
+            <div class="login-form-card" dir="{{ $is_rtl ? 'rtl' : 'ltr' }}">
                 <div class="tw-flex tw-flex-col tw-gap-4 tw-dw-rounded-box tw-dw-p-6 tw-dw-max-w-md">
                     <div class="tw-flex tw-items-center tw-flex-col">
-                        <h1 class="tw-text-lg md:tw-text-xl tw-font-semibold tw-text-[#1e1e1e]">
+                        <h1>
                             @lang('lang_v1.welcome_back')
                         </h1>
-                        <h2 class="tw-text-sm tw-font-medium tw-text-gray-500">
+                        <h2>
                             @lang('lang_v1.login_to_your') {{ config('app.name', 'ultimatePOS') }}
                         </h2>
                     </div>
@@ -129,9 +415,8 @@
                                 </div>
 
                                 <input
-                                    class="tw-border tw-border-[#D1D5DA] tw-outline-none tw-h-12 tw-bg-transparent tw-rounded-lg tw-px-3 tw-font-medium tw-text-black placeholder:tw-text-gray-500 placeholder:tw-font-medium"
                                     name="username" required autofocus placeholder="@lang('lang_v1.username')"
-                                    data-last-active-input="" id="username" type="text" name="username"
+                                    data-last-active-input="" id="username" type="text"
                                     value="{{ $username }}" />
                                 @if ($errors->has('username'))
                                     <span class="help-block">
@@ -154,11 +439,10 @@
                                 </div>
 
                                 <input
-                                    class="tw-border tw-border-[#D1D5DA] tw-outline-none tw-h-12 tw-bg-transparent tw-rounded-lg tw-px-3 {{ $is_rtl ? 'tw-pl-10' : 'tw-pr-10' }} tw-font-medium tw-text-black placeholder:tw-text-gray-500 placeholder:tw-font-medium"
                                     id="password" type="password" name="password" value="{{ $password }}" required
                                     placeholder="@lang('lang_v1.password')" />
                                 <button type="button" id="show_hide_icon" class="show_hide_icon"
-                                    style="position: absolute; top:48px;{{ $is_rtl ? 'left:5px;' : 'right:5px;' }}">
+                                    style="position: absolute;">
                                     <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-eye tw-w-6" viewBox="0 0 24 24" stroke-width="1.5" stroke="#000000" fill="none" stroke-linecap="round" stroke-linejoin="round">
                                         <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
                                         <path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" />
@@ -195,12 +479,12 @@
                         </div>
                         @endif
                         <button type="submit"
-                            class="tw-bg-gradient-to-r tw-from-indigo-500 tw-to-blue-500 tw-h-12 tw-rounded-xl tw-text-sm md:tw-text-base tw-text-white tw-font-semibold tw-w-full tw-max-w-full mt-2 hover:tw-from-indigo-600 hover:tw-to-blue-600 focus:tw-outline-none focus:tw-ring-2 focus:tw-ring-blue-500 focus:tw-ring-offset-2 active:tw-from-indigo-700 active:tw-to-blue-700">
+                            class="login-submit tw-bg-gradient-to-r tw-from-indigo-500 tw-to-blue-500 tw-text-sm md:tw-text-base tw-text-white tw-font-semibold tw-w-full tw-max-w-full hover:tw-from-indigo-600 hover:tw-to-blue-600 focus:tw-outline-none focus:tw-ring-2 focus:tw-ring-blue-500 focus:tw-ring-offset-2 active:tw-from-indigo-700 active:tw-to-blue-700">
                             @lang('lang_v1.login')
                         </button>
                     </form>
 
-                    <div class="tw-flex tw-items-center tw-flex-col">
+                    <div class="login-register-link">
                         <!-- Register Url -->
 
                         @if (!($request->segment(1) == 'business' && $request->segment(2) == 'register'))
@@ -216,7 +500,6 @@
                 </div>
             </div>
         </div>
-        <div class="col-md-4"></div>
     </div>
 
 @stop

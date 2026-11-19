@@ -48,14 +48,14 @@
 <div class="payment_details_div @if( $payment_line->method !== 'cheque' ) {{ 'hide' }} @endif" data-type="cheque" >
 	<div class="col-md-6">
 		<div class="form-group">
-			{!! Form::label("cheque_number",__('lang_v1.cheque_no')) !!}
-			{!! Form::text("cheque_number", $payment_line->cheque_number, ['class' => 'form-control', 'placeholder' => __('lang_v1.cheque_no')]); !!}
+			{!! Form::label("cheque_number", __('lang_v1.cheque_no') . ':*') !!}
+			{!! Form::text("cheque_number", $payment_line->cheque_number, ['class' => 'form-control cheque_number_field', 'placeholder' => __('lang_v1.cheque_no'), 'required' => $payment_line->method === 'cheque']); !!}
 		</div>
 	</div>
 	<div class="col-md-6">
 		<div class="form-group">
-			{!! Form::label("cheque_due_date", __('cheque::lang.due_date')) !!}
-			{!! Form::text("cheque_due_date", $payment_line->cheque_due_date ? \Carbon\Carbon::parse($payment_line->cheque_due_date)->format('d/m/Y') : '', ['class' => 'form-control date_picker', 'placeholder' => __('cheque::lang.due_date'), 'readonly']); !!}
+			{!! Form::label("cheque_due_date", __('cheque::lang.due_date') . ':*') !!}
+			{!! Form::text("cheque_due_date", $payment_line->cheque_due_date ? \Carbon\Carbon::parse($payment_line->cheque_due_date)->format(session('business.date_format') ?: config('constants.default_date_format')) : '', ['class' => 'form-control date_picker cheque_due_date_field', 'placeholder' => __('cheque::lang.due_date'), 'required' => $payment_line->method === 'cheque']); !!}
 		</div>
 	</div>
 </div>

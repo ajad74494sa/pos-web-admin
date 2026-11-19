@@ -1599,6 +1599,7 @@ $(document).ready(function() {
 
     $(document).on('change', '.payment_types_dropdown', function() {
         var payment_type = $(this).val();
+        var $payment_row = $(this).closest('.payment_row');
         var to_show = null;
         $(this)
             .closest('.payment_row')
@@ -1621,12 +1622,14 @@ $(document).ready(function() {
                 .focus();
         }
 
-        if ($(this).closest('.payment_row').find('.enable_cash_denomination_for_payment_methods').length) {
-            var payment_methods = JSON.parse($(this).closest('.payment_row').find('.enable_cash_denomination_for_payment_methods').val());
+        $payment_row.find('.cheque_number_field, .cheque_due_date_field').prop('required', payment_type === 'cheque');
+
+        if ($payment_row.find('.enable_cash_denomination_for_payment_methods').length) {
+            var payment_methods = JSON.parse($payment_row.find('.enable_cash_denomination_for_payment_methods').val());
             if (payment_methods.indexOf(payment_type) >= 0) {
-                $(this).closest('.payment_row').find('.cash_denomination_div').removeClass('hide');
+                $payment_row.find('.cash_denomination_div').removeClass('hide');
             } else {
-                $(this).closest('.payment_row').find('.cash_denomination_div').addClass('hide');
+                $payment_row.find('.cash_denomination_div').addClass('hide');
             }
         }
     });

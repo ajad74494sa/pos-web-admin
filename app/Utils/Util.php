@@ -19,6 +19,7 @@ use GuzzleHttp\Client;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Storage;
 use Spatie\Permission\Models\Role;
 use Illuminate\Support\Str; // Add this at the top with other imports
 
@@ -866,12 +867,99 @@ class Util
             $sanitized_name = Str::slug($original_name);
             $new_file_name = time().'_'.mt_rand().'_'.substr($sanitized_name ?: 'upload', 0, 100).'.'.$extension;
 
-            if ($file->storeAs($dir_name, $new_file_name)) {
+            $is_product_image = $file_type === 'image'
+                && $dir_name === config('constants.product_img_path')
+                && in_array($extension, ['jpg', 'png', 'webp'], true)
+                && ($extension !== 'webp' || function_exists('imagewebp'));
+
+            if ($is_product_image) {
+                $stored = Storage::disk()->put(
+                    $dir_name.'/'.$new_file_name,
+                    $this->compressProductImage($file->getRealPath(), $extension)
+                );
+                if (! $stored) {
+                    throw new \RuntimeException('Unable to store the compressed product image.');
+                }
+            } else {
+                $stored = $file->storeAs($dir_name, $new_file_name);
+            }
+
+            if ($stored) {
                 $uploaded_file_name = $new_file_name;
             }
         }
 
         return $uploaded_file_name;
+    }
+
+    private function compressProductImage($image_path, $extension)
+    {
+        if (! function_exists('imagecreatefromstring')) {
+            throw new \RuntimeException('The GD extension is required to compress product images.');
+        }
+
+        $image_contents = file_get_contents($image_path);
+        if ($image_contents === false) {
+            throw new \RuntimeException('Unable to read the uploaded product image.');
+        }
+
+        $source = imagecreatefromstring($image_contents);
+        if ($source === false) {
+            throw new \InvalidArgumentException('Unable to decode the uploaded product image.');
+        }
+
+        $resized = null;
+        try {
+            $width = imagesx($source);
+            $height = imagesy($source);
+            $max_dimension = 1600;
+            $scale = min(1, $max_dimension / max($width, $height));
+            $image = $source;
+
+            if ($scale < 1) {
+                $new_width = max(1, (int) round($width * $scale));
+                $new_height = max(1, (int) round($height * $scale));
+                $resized = imagecreatetruecolor($new_width, $new_height);
+                if ($resized === false) {
+                    throw new \RuntimeException('Unable to prepare the product image for compression.');
+                }
+
+                if (in_array($extension, ['png', 'webp'], true)) {
+                    imagealphablending($resized, false);
+                    imagesavealpha($resized, true);
+                    $transparent = imagecolorallocatealpha($resized, 0, 0, 0, 127);
+                    imagefill($resized, 0, 0, $transparent);
+                }
+
+                if (! imagecopyresampled($resized, $source, 0, 0, 0, 0, $new_width, $new_height, $width, $height)) {
+                    throw new \RuntimeException('Unable to resize the uploaded product image.');
+                }
+                $image = $resized;
+            }
+
+            ob_start();
+            if ($extension === 'jpg') {
+                $encoded = imagejpeg($image, null, 82);
+            } elseif ($extension === 'png') {
+                $encoded = imagepng($image, null, 8);
+            } else {
+                $encoded = imagewebp($image, null, 82);
+            }
+            $compressed_contents = ob_get_clean();
+
+            if (! $encoded || $compressed_contents === false) {
+                throw new \RuntimeException('Unable to compress the uploaded product image.');
+            }
+
+            return strlen($compressed_contents) < strlen($image_contents)
+                ? $compressed_contents
+                : $image_contents;
+        } finally {
+            if ($resized !== null && $resized !== false) {
+                imagedestroy($resized);
+            }
+            imagedestroy($source);
+        }
     }
 
     public function serviceStaffDropdown($business_id, $location_id = null)

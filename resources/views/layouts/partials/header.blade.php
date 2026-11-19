@@ -207,7 +207,8 @@
                         @if (!empty($__profile_media))
                             <img src="{{ $__profile_media->display_url }}"
                                 alt="{{ Auth::User()->first_name }} {{ Auth::User()->last_name }}"
-                                class="tw-size-5 tw-rounded-full tw-object-cover">
+                                width="20" height="20"
+                                style="display:block;width:20px;height:20px;min-width:20px;object-fit:cover;border-radius:50%;">
                         @else
                             <svg  xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="tw-size-5"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0 -18 0" /><path d="M12 10m-3 0a3 3 0 1 0 6 0a3 3 0 1 0 -6 0" /><path d="M6.168 18.849a4 4 0 0 1 3.832 -2.849h4a4 4 0 0 1 3.834 2.855" /></svg>
                         @endif
@@ -230,7 +231,8 @@
                             @if (!empty($__profile_media))
                                 <img src="{{ $__profile_media->display_url }}"
                                     alt="{{ Auth::User()->first_name }} {{ Auth::User()->last_name }}"
-                                    class="tw-size-9 tw-rounded-full tw-object-cover tw-shrink-0">
+                                    width="40" height="40"
+                                    style="display:block;width:40px;height:40px;min-width:40px;max-width:40px;object-fit:cover;border-radius:50%;flex:0 0 40px;">
                             @else
                                 <svg  xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="tw-size-5 tw-shrink-0 tw-text-gray-600"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0 -18 0" /><path d="M12 10m-3 0a3 3 0 1 0 6 0a3 3 0 1 0 -6 0" /><path d="M6.168 18.849a4 4 0 0 1 3.832 -2.849h4a4 4 0 0 1 3.834 2.855" /></svg>
                             @endif
