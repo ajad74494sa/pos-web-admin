@@ -1,0 +1,25 @@
+SESSION STATUS REQUEST:
+HTTP/200
+{"id":"4bb7b0dc-c9d5-4f2c-a0a3-6bc9b2999f6d","name":"test1","status":"ready","phone":"966561624285","pushName":"Abul Kalam Azad","connectedAt":"2026-07-10T17:37:54.370Z","lastActive":"2026-07-10T17:37:54.370Z","createdAt":"2026-07-08T07:00:14.000Z","updatedAt":"2026-07-10T17:37:54.000Z","lastError":null}
+
+SEND TEST MESSAGE REQUEST:
+--- Variant 1 payload:{"chatId":"966561624285@c.us","text":"Test from POS - chatId @c.us"}
+HTTP/201
+{"messageId":"3EB071DE58C05EA2A74938","timestamp":1783708409}
+
+--- Variant 2 payload:{"chatId":"966561624285@s.whatsapp.net","text":"Test from POS - chatId @s.whatsapp.net"}
+HTTP/201
+{"messageId":"3EB00918EA232F0D32501F","timestamp":1783708412}
+
+--- Variant 3 payload:{"to":"966561624285","text":"Test from POS - to numeric"}
+HTTP/400
+{"message":"Bad Request","statusCode":400}
+
+--- Variant 4 payload:{"to":"+966561624285","text":"Test from POS - to with plus"}
+HTTP/400
+{"message":"Bad Request","statusCode":400}
+
+--- Variant 5 payload:{"chatId":"966561624285@c.us","text":"Test from POS - with mentions","mentions":["628123456789@c.us"]}
+HTTP/201
+{"messageId":"3EB0EB93075899179EC11A","timestamp":1783708414}
+
