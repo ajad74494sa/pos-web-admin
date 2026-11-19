@@ -180,6 +180,8 @@ class PurchaseController extends ApiController
      * @bodyParam payments array Optional purchase payments; cannot be used with draft status.
      * @bodyParam payments.*.amount number required Positive payment amount in the business base currency. Example: 10
      * @bodyParam payments.*.method string required Payment method enabled for the selected location, or advance. Example: cash
+     * @bodyParam payments.*.cheque_number string Required when method is cheque. Example: CHQ-1001
+     * @bodyParam payments.*.cheque_due_date date Required when method is cheque; use YYYY-MM-DD. Example: 2026-11-30
      * @bodyParam payments.*.paid_on string Optional payment date. Example: 2026-10-25
      * @bodyParam payments.*.note string Optional payment note.
      * @bodyParam payments.*.account_id integer Optional active account ID accessible to the user; requires account.access permission.
@@ -211,7 +213,7 @@ class PurchaseController extends ApiController
         }, array_values($documentMimeExtensions));
         $documentMaxKilobytes = (int) floor(config('constants.document_size_limit') / 1024);
 
-        $data = $request->validate([
+        $validationRules = [
             'contact_id' => ['required', 'integer', Rule::exists('contacts', 'id')->where(function ($query) use ($businessId) {
                 $query->where('business_id', $businessId)->whereIn('type', ['supplier', 'both']);
             })],
@@ -273,7 +275,8 @@ class PurchaseController extends ApiController
             'payments.*.transaction_no_5' => ['nullable', 'string', 'max:191'],
             'payments.*.transaction_no_6' => ['nullable', 'string', 'max:191'],
             'payments.*.transaction_no_7' => ['nullable', 'string', 'max:191'],
-        ]);
+        ];
+        $data = $request->validate(array_merge($validationRules, $this->chequePaymentValidationRules()));
 
         if (($data['discount_type'] ?? 'fixed') === 'percentage' && ($data['discount_amount'] ?? 0) > 100) {
             return response()->json(['error' => ['message' => 'The purchase discount percentage cannot exceed 100.']], 422);
@@ -524,6 +527,8 @@ class PurchaseController extends ApiController
      * @bodyParam payments array Optional new payments to append; existing payments are preserved.
      * @bodyParam payments.*.amount number required Positive payment amount in the business base currency. Example: 10
      * @bodyParam payments.*.method string required Payment method enabled for the purchase location, or advance. Example: cash
+     * @bodyParam payments.*.cheque_number string Required when method is cheque. Example: CHQ-1001
+     * @bodyParam payments.*.cheque_due_date date Required when method is cheque; use YYYY-MM-DD. Example: 2026-11-30
      * @bodyParam payments.*.paid_on string Optional payment date. Example: 2026-10-25
      * @bodyParam payments.*.note string Optional payment note.
      * @bodyParam payments.*.account_id integer Optional active account ID accessible to the user; requires account.access permission.
@@ -556,7 +561,7 @@ class PurchaseController extends ApiController
             return response()->json(['error' => ['message' => 'You are not authorized to add purchase payments.']], 403);
         }
 
-        $data = $request->validate([
+        $validationRules = [
             'status' => ['sometimes', 'required', Rule::in(['received', 'pending', 'ordered', 'draft'])],
             'payments' => ['sometimes', 'required', 'array', 'min:1'],
             'payments.*.amount' => ['required', 'numeric', 'gt:0'],
@@ -571,7 +576,8 @@ class PurchaseController extends ApiController
             'payments.*.transaction_no_5' => ['nullable', 'string', 'max:191'],
             'payments.*.transaction_no_6' => ['nullable', 'string', 'max:191'],
             'payments.*.transaction_no_7' => ['nullable', 'string', 'max:191'],
-        ]);
+        ];
+        $data = $request->validate(array_merge($validationRules, $this->chequePaymentValidationRules()));
 
         $permittedLocations = $user->permitted_locations($businessId);
         $purchaseQuery = Transaction::where('business_id', $businessId)
@@ -716,6 +722,14 @@ class PurchaseController extends ApiController
         return array_values(array_unique($accountIds));
     }
 
+    private function chequePaymentValidationRules()
+    {
+        return [
+            'payments.*.cheque_number' => ['required_if:payments.*.method,cheque', 'nullable', 'string', 'max:255'],
+            'payments.*.cheque_due_date' => ['required_if:payments.*.method,cheque', 'nullable', 'date'],
+        ];
+    }
+
     private function formatPurchase(Transaction $purchase)
     {
         return [
@@ -780,6 +794,8 @@ class PurchaseController extends ApiController
                     'id' => $payment->id,
                     'amount' => $payment->amount,
                     'method' => $payment->method,
+                    'cheque_number' => $payment->cheque_number,
+                    'cheque_due_date' => $payment->cheque_due_date,
                     'paid_on' => $payment->paid_on,
                     'note' => $payment->note,
                 ];

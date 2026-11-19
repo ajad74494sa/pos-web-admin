@@ -5,7 +5,9 @@ namespace Tests\Feature;
 use App\Http\Controllers\TransactionPaymentController;
 use App\Utils\TransactionUtil;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
+use Modules\Connector\Http\Controllers\Api\PurchaseController;
 use Tests\TestCase;
 
 class ChequePaymentValidationTest extends TestCase
@@ -30,5 +32,31 @@ class ChequePaymentValidationTest extends TestCase
 
         $util = $this->app->make(TransactionUtil::class);
         $util->editPaymentLine(['method' => 'cheque', 'payment_id' => 1]);
+    }
+
+    public function test_purchase_api_requires_and_accepts_nested_cheque_details()
+    {
+        $controller = $this->app->make(PurchaseController::class);
+        $rulesMethod = new \ReflectionMethod(PurchaseController::class, 'chequePaymentValidationRules');
+        $rulesMethod->setAccessible(true);
+        $rules = $rulesMethod->invoke($controller);
+
+        $missingDetails = Validator::make([
+            'payments' => [['method' => 'cheque']],
+        ], $rules);
+
+        $this->assertTrue($missingDetails->fails());
+        $this->assertArrayHasKey('payments.0.cheque_number', $missingDetails->errors()->toArray());
+        $this->assertArrayHasKey('payments.0.cheque_due_date', $missingDetails->errors()->toArray());
+
+        $completeDetails = Validator::make([
+            'payments' => [[
+                'method' => 'cheque',
+                'cheque_number' => 'CHQ-1001',
+                'cheque_due_date' => '2026-11-30',
+            ]],
+        ], $rules);
+
+        $this->assertFalse($completeDetails->fails());
     }
 }
