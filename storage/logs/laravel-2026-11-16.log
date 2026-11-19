@@ -1,0 +1,44 @@
+[2026-11-16 03:39:59] production.ERROR: The "--columns" option does not exist. {"exception":"[object] (Symfony\\Component\\Console\\Exception\\RuntimeException(code: 0): The \"--columns\" option does not exist. at /home/krrider-pos/htdocs/pos.krrider.cloud/vendor/symfony/console/Input/ArgvInput.php:222)
+[stacktrace]
+#0 /home/krrider-pos/htdocs/pos.krrider.cloud/vendor/symfony/console/Input/ArgvInput.php(149): Symfony\\Component\\Console\\Input\\ArgvInput->addLongOption()
+#1 /home/krrider-pos/htdocs/pos.krrider.cloud/vendor/symfony/console/Input/ArgvInput.php(85): Symfony\\Component\\Console\\Input\\ArgvInput->parseLongOption()
+#2 /home/krrider-pos/htdocs/pos.krrider.cloud/vendor/symfony/console/Input/ArgvInput.php(74): Symfony\\Component\\Console\\Input\\ArgvInput->parseToken()
+#3 /home/krrider-pos/htdocs/pos.krrider.cloud/vendor/symfony/console/Input/Input.php(56): Symfony\\Component\\Console\\Input\\ArgvInput->parse()
+#4 /home/krrider-pos/htdocs/pos.krrider.cloud/vendor/symfony/console/Command/Command.php(285): Symfony\\Component\\Console\\Input\\Input->bind()
+#5 /home/krrider-pos/htdocs/pos.krrider.cloud/vendor/laravel/framework/src/Illuminate/Console/Command.php(152): Symfony\\Component\\Console\\Command\\Command->run()
+#6 /home/krrider-pos/htdocs/pos.krrider.cloud/vendor/symfony/console/Application.php(1098): Illuminate\\Console\\Command->run()
+#7 /home/krrider-pos/htdocs/pos.krrider.cloud/vendor/symfony/console/Application.php(324): Symfony\\Component\\Console\\Application->doRunCommand()
+#8 /home/krrider-pos/htdocs/pos.krrider.cloud/vendor/symfony/console/Application.php(175): Symfony\\Component\\Console\\Application->doRun()
+#9 /home/krrider-pos/htdocs/pos.krrider.cloud/vendor/laravel/framework/src/Illuminate/Console/Application.php(102): Symfony\\Component\\Console\\Application->run()
+#10 /home/krrider-pos/htdocs/pos.krrider.cloud/vendor/laravel/framework/src/Illuminate/Foundation/Console/Kernel.php(155): Illuminate\\Console\\Application->run()
+#11 /home/krrider-pos/htdocs/pos.krrider.cloud/artisan(35): Illuminate\\Foundation\\Console\\Kernel->handle()
+#12 {main}
+"} 
+[2026-11-16 03:40:23] production.ERROR: Class "PaymentAccountController" does not exist {"exception":"[object] (ReflectionException(code: -1): Class \"PaymentAccountController\" does not exist at /home/krrider-pos/htdocs/pos.krrider.cloud/vendor/laravel/framework/src/Illuminate/Foundation/Console/RouteListCommand.php:234)
+[stacktrace]
+#0 /home/krrider-pos/htdocs/pos.krrider.cloud/vendor/laravel/framework/src/Illuminate/Foundation/Console/RouteListCommand.php(234): ReflectionClass->__construct()
+#1 /home/krrider-pos/htdocs/pos.krrider.cloud/vendor/laravel/framework/src/Illuminate/Foundation/Console/RouteListCommand.php(156): Illuminate\\Foundation\\Console\\RouteListCommand->isVendorRoute()
+#2 /home/krrider-pos/htdocs/pos.krrider.cloud/vendor/laravel/framework/src/Illuminate/Foundation/Console/RouteListCommand.php(125): Illuminate\\Foundation\\Console\\RouteListCommand->getRouteInformation()
+#3 [internal function]: Illuminate\\Foundation\\Console\\RouteListCommand->{closure:Illuminate\\Foundation\\Console\\RouteListCommand::getRoutes():124}()
+#4 /home/krrider-pos/htdocs/pos.krrider.cloud/vendor/laravel/framework/src/Illuminate/Collections/Arr.php(560): array_map()
+#5 /home/krrider-pos/htdocs/pos.krrider.cloud/vendor/laravel/framework/src/Illuminate/Collections/Collection.php(768): Illuminate\\Support\\Arr::map()
+#6 /home/krrider-pos/htdocs/pos.krrider.cloud/vendor/laravel/framework/src/Illuminate/Foundation/Console/RouteListCommand.php(124): Illuminate\\Support\\Collection->map()
+#7 /home/krrider-pos/htdocs/pos.krrider.cloud/vendor/laravel/framework/src/Illuminate/Foundation/Console/RouteListCommand.php(110): Illuminate\\Foundation\\Console\\RouteListCommand->getRoutes()
+#8 /home/krrider-pos/htdocs/pos.krrider.cloud/vendor/laravel/framework/src/Illuminate/Container/BoundMethod.php(36): Illuminate\\Foundation\\Console\\RouteListCommand->handle()
+#9 /home/krrider-pos/htdocs/pos.krrider.cloud/vendor/laravel/framework/src/Illuminate/Container/Util.php(41): Illuminate\\Container\\BoundMethod::{closure:Illuminate\\Container\\BoundMethod::call():35}()
+#10 /home/krrider-pos/htdocs/pos.krrider.cloud/vendor/laravel/framework/src/Illuminate/Container/BoundMethod.php(93): Illuminate\\Container\\Util::unwrapIfClosure()
+#11 /home/krrider-pos/htdocs/pos.krrider.cloud/vendor/laravel/framework/src/Illuminate/Container/BoundMethod.php(35): Illuminate\\Container\\BoundMethod::callBoundMethod()
+#12 /home/krrider-pos/htdocs/pos.krrider.cloud/vendor/laravel/framework/src/Illuminate/Container/Container.php(661): Illuminate\\Container\\BoundMethod::call()
+#13 /home/krrider-pos/htdocs/pos.krrider.cloud/vendor/laravel/framework/src/Illuminate/Console/Command.php(183): Illuminate\\Container\\Container->call()
+#14 /home/krrider-pos/htdocs/pos.krrider.cloud/vendor/symfony/console/Command/Command.php(326): Illuminate\\Console\\Command->execute()
+#15 /home/krrider-pos/htdocs/pos.krrider.cloud/vendor/laravel/framework/src/Illuminate/Console/Command.php(152): Symfony\\Component\\Console\\Command\\Command->run()
+#16 /home/krrider-pos/htdocs/pos.krrider.cloud/vendor/symfony/console/Application.php(1098): Illuminate\\Console\\Command->run()
+#17 /home/krrider-pos/htdocs/pos.krrider.cloud/vendor/symfony/console/Application.php(324): Symfony\\Component\\Console\\Application->doRunCommand()
+#18 /home/krrider-pos/htdocs/pos.krrider.cloud/vendor/symfony/console/Application.php(175): Symfony\\Component\\Console\\Application->doRun()
+#19 /home/krrider-pos/htdocs/pos.krrider.cloud/vendor/laravel/framework/src/Illuminate/Console/Application.php(102): Symfony\\Component\\Console\\Application->run()
+#20 /home/krrider-pos/htdocs/pos.krrider.cloud/vendor/laravel/framework/src/Illuminate/Foundation/Console/Kernel.php(155): Illuminate\\Console\\Application->run()
+#21 /home/krrider-pos/htdocs/pos.krrider.cloud/artisan(35): Illuminate\\Foundation\\Console\\Kernel->handle()
+#22 {main}
+"} 
+[2026-11-16 03:43:02] testing.INFO: OpenWA request payload {"url":"http://example.test/api/sessions/test-session/messages/send-text","headers":{"Accept":"application/json","Content-Type":"application/json","X-API-Key":"test-key"},"payload":{"text":"Hello from POS","chatId":"1234567890@c.us"}} 
+[2026-11-16 03:43:02] testing.INFO: OpenWA response {"status":200,"headers":{"Content-Type":["application/json"]},"body":"{\"success\":true}"} 

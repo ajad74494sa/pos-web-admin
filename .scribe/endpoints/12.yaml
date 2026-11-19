@@ -1,0 +1,1434 @@
+name: 'Purchase management'
+description: ''
+endpoints:
+  -
+    httpMethods:
+      - GET
+    uri: connector/api/purchase
+    metadata:
+      groupName: 'Purchase management'
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: "List purchases belonging to the authenticated user's business."
+      description: ''
+      authenticated: true
+      custom: []
+    headers:
+      Authorization: 'Bearer {access_token}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters:
+      location_id:
+        name: location_id
+        description: 'Optional accessible business location ID.'
+        required: false
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        custom: []
+      contact_id:
+        name: contact_id
+        description: 'Optional supplier contact ID.'
+        required: false
+        example: 12
+        type: integer
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        custom: []
+      status:
+        name: status
+        description: 'Optional received, pending, ordered, or draft.'
+        required: false
+        example: received
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        custom: []
+      payment_status:
+        name: payment_status
+        description: 'Optional paid, partial, or due.'
+        required: false
+        example: due
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        custom: []
+      start_date:
+        name: start_date
+        description: 'Optional inclusive start date.'
+        required: false
+        example: '2026-10-01'
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        custom: []
+      end_date:
+        name: end_date
+        description: 'Optional inclusive end date.'
+        required: false
+        example: '2026-10-31'
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        custom: []
+      per_page:
+        name: per_page
+        description: 'Optional page size from 1 to 100.'
+        required: false
+        example: 25
+        type: integer
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        custom: []
+    cleanQueryParameters:
+      location_id: 1
+      contact_id: 12
+      status: received
+      payment_status: due
+      start_date: '2026-10-01'
+      end_date: '2026-10-31'
+      per_page: 25
+    bodyParameters:
+      location_id:
+        name: location_id
+        description: ''
+        required: false
+        example: 11
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      contact_id:
+        name: contact_id
+        description: ''
+        required: false
+        example: 13
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      status:
+        name: status
+        description: ''
+        required: false
+        example: null
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      payment_status:
+        name: payment_status
+        description: ''
+        required: false
+        example: null
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      start_date:
+        name: start_date
+        description: 'Must be a valid date.'
+        required: false
+        example: '2026-11-19T10:52:14'
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      end_date:
+        name: end_date
+        description: 'Must be a valid date. Must be a date after or equal to <code>start_date</code>.'
+        required: false
+        example: '2050-06-23'
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      per_page:
+        name: per_page
+        description: 'Must be at least 1. Must not be greater than 100.'
+        required: false
+        example: 13
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+    cleanBodyParameters:
+      location_id: 11
+      contact_id: 13
+      start_date: '2026-11-19T10:52:14'
+      end_date: '2050-06-23'
+      per_page: 13
+    fileParameters: []
+    responses:
+      -
+        status: 401
+        content: '{"message":"Unauthenticated."}'
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+        description: null
+        custom: []
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 4dePvD6b8kf1caZha65VEg3'
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - POST
+    uri: connector/api/purchase
+    metadata:
+      groupName: 'Purchase management'
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Create a purchase and update stock for received purchases.'
+      description: ''
+      authenticated: true
+      custom: []
+    headers:
+      Authorization: 'Bearer {access_token}'
+      Content-Type: multipart/form-data
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      contact_id:
+        name: contact_id
+        description: 'Supplier contact ID in this business.'
+        required: true
+        example: 12
+        type: integer
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        custom: []
+      location_id:
+        name: location_id
+        description: 'Active business location accessible to the authenticated user.'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        custom: []
+      transaction_date:
+        name: transaction_date
+        description: 'Optional purchase date.'
+        required: false
+        example: '2026-10-25'
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: true
+        custom: []
+      status:
+        name: status
+        description: 'Optional received, pending, ordered, or draft. Defaults to received.'
+        required: false
+        example: received
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: true
+        custom: []
+      ref_no:
+        name: ref_no
+        description: 'Optional purchase reference number; generated when omitted or blank.'
+        required: false
+        example: PO-API-1001
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: true
+        custom: []
+      exchange_rate:
+        name: exchange_rate
+        description: 'Optional positive rate for the purchase currency. Defaults to 1.'
+        required: false
+        example: 1.0
+        type: number
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: true
+        custom: []
+      tax_id:
+        name: tax_id
+        description: 'Optional purchase-level tax rate ID belonging to this business.'
+        required: false
+        example: 2
+        type: integer
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: true
+        custom: []
+      discount_type:
+        name: discount_type
+        description: 'Optional fixed or percentage. Defaults to fixed.'
+        required: false
+        example: fixed
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: true
+        custom: []
+      discount_amount:
+        name: discount_amount
+        description: 'Optional non-negative discount in purchase currency.'
+        required: false
+        example: 5.0
+        type: number
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: true
+        custom: []
+      shipping_charges:
+        name: shipping_charges
+        description: 'Optional non-negative shipping charge in purchase currency.'
+        required: false
+        example: 3.0
+        type: number
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: true
+        custom: []
+      shipping_details:
+        name: shipping_details
+        description: 'Optional shipping information.'
+        required: false
+        example: placeat
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      additional_notes:
+        name: additional_notes
+        description: 'Optional purchase notes.'
+        required: false
+        example: vero
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      pay_term_number:
+        name: pay_term_number
+        description: 'Optional supplier payment term length.'
+        required: false
+        example: 30
+        type: integer
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: true
+        custom: []
+      pay_term_type:
+        name: pay_term_type
+        description: 'Required with pay_term_number; days or months.'
+        required: false
+        example: days
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: true
+        custom: []
+      document:
+        name: document
+        description: 'Optional purchase document. Must use a configured document MIME type and size limit.'
+        required: false
+        example: null
+        type: file
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      custom_field_1:
+        name: custom_field_1
+        description: 'Optional purchase custom field.'
+        required: false
+        example: sunt
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      custom_field_2:
+        name: custom_field_2
+        description: 'Optional purchase custom field.'
+        required: false
+        example: at
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      custom_field_3:
+        name: custom_field_3
+        description: 'Optional purchase custom field.'
+        required: false
+        example: distinctio
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      custom_field_4:
+        name: custom_field_4
+        description: 'Optional purchase custom field.'
+        required: false
+        example: dolorem
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      shipping_custom_field_1:
+        name: shipping_custom_field_1
+        description: 'Optional shipping custom field.'
+        required: false
+        example: in
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      shipping_custom_field_2:
+        name: shipping_custom_field_2
+        description: 'Optional shipping custom field.'
+        required: false
+        example: ipsam
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      shipping_custom_field_3:
+        name: shipping_custom_field_3
+        description: 'Optional shipping custom field.'
+        required: false
+        example: vitae
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      shipping_custom_field_4:
+        name: shipping_custom_field_4
+        description: 'Optional shipping custom field.'
+        required: false
+        example: qui
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      shipping_custom_field_5:
+        name: shipping_custom_field_5
+        description: 'Optional shipping custom field.'
+        required: false
+        example: cupiditate
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      additional_expense_key_1:
+        name: additional_expense_key_1
+        description: 'Optional first additional expense label.'
+        required: false
+        example: Freight
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: true
+        custom: []
+      additional_expense_key_2:
+        name: additional_expense_key_2
+        description: 'Optional second additional expense label.'
+        required: false
+        example: ipsum
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      additional_expense_key_3:
+        name: additional_expense_key_3
+        description: 'Optional third additional expense label.'
+        required: false
+        example: dolor
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      additional_expense_key_4:
+        name: additional_expense_key_4
+        description: 'Optional fourth additional expense label.'
+        required: false
+        example: velit
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      additional_expense_value_1:
+        name: additional_expense_value_1
+        description: 'Optional first additional expense amount.'
+        required: false
+        example: 2.0
+        type: number
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: true
+        custom: []
+      additional_expense_value_2:
+        name: additional_expense_value_2
+        description: 'Optional second additional expense amount.'
+        required: false
+        example: 77108609.1
+        type: number
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      additional_expense_value_3:
+        name: additional_expense_value_3
+        description: 'Optional third additional expense amount.'
+        required: false
+        example: 276403737.6
+        type: number
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      additional_expense_value_4:
+        name: additional_expense_value_4
+        description: 'Optional fourth additional expense amount.'
+        required: false
+        example: 52.0
+        type: number
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      products:
+        name: products
+        description: 'At least one purchase line. Quantities are in the product base unit.'
+        required: true
+        example:
+          - fugit
+        type: 'string[]'
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+      payments:
+        name: payments
+        description: 'Optional purchase payments; cannot be used with draft status.'
+        required: false
+        example:
+          - quo
+        type: 'string[]'
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+      'products[].product_id':
+        name: 'products[].product_id'
+        description: ''
+        required: true
+        example: 17
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+      'products[].variation_id':
+        name: 'products[].variation_id'
+        description: ''
+        required: true
+        example: 5
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+      'products[].quantity':
+        name: 'products[].quantity'
+        description: ''
+        required: true
+        example: 0.0
+        type: number
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+      'products[].unit_cost_before_discount':
+        name: 'products[].unit_cost_before_discount'
+        description: 'Must be at least 0.'
+        required: true
+        example: 3
+        type: number
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+      'products[].discount_percent':
+        name: 'products[].discount_percent'
+        description: 'Must be between 0 and 100.'
+        required: false
+        example: 0
+        type: number
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      'products[].purchase_line_tax_id':
+        name: 'products[].purchase_line_tax_id'
+        description: 'Must be at least 1.'
+        required: false
+        example: 16
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      'products[].lot_number':
+        name: 'products[].lot_number'
+        description: 'Must not be greater than 191 characters.'
+        required: false
+        example: tnmgpbmhhmyp
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      'products[].mfg_date':
+        name: 'products[].mfg_date'
+        description: 'Must be a valid date.'
+        required: false
+        example: '2026-11-19T10:52:14'
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      'products[].exp_date':
+        name: 'products[].exp_date'
+        description: 'Must be a valid date.'
+        required: false
+        example: '2026-11-19T10:52:14'
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      'payments[].amount':
+        name: 'payments[].amount'
+        description: ''
+        required: true
+        example: 40.5
+        type: number
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+      'payments[].method':
+        name: 'payments[].method'
+        description: ''
+        required: true
+        example: ut
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+      'payments[].paid_on':
+        name: 'payments[].paid_on'
+        description: 'Must be a valid date.'
+        required: false
+        example: '2026-11-19T10:52:14'
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      'payments[].note':
+        name: 'payments[].note'
+        description: 'Must not be greater than 1000 characters.'
+        required: false
+        example: aqaaqdshyoqtbdwhexfudqid
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      'payments[].account_id':
+        name: 'payments[].account_id'
+        description: 'Must be at least 1.'
+        required: false
+        example: 19
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      'payments[].transaction_no_1':
+        name: 'payments[].transaction_no_1'
+        description: 'Must not be greater than 191 characters.'
+        required: false
+        example: gqbpmpfsznkxlluuyjpfjange
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      'payments[].transaction_no_2':
+        name: 'payments[].transaction_no_2'
+        description: 'Must not be greater than 191 characters.'
+        required: false
+        example: ledkhryrtevy
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      'payments[].transaction_no_3':
+        name: 'payments[].transaction_no_3'
+        description: 'Must not be greater than 191 characters.'
+        required: false
+        example: vrqlwn
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      'payments[].transaction_no_4':
+        name: 'payments[].transaction_no_4'
+        description: 'Must not be greater than 191 characters.'
+        required: false
+        example: yyqhg
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      'payments[].transaction_no_5':
+        name: 'payments[].transaction_no_5'
+        description: 'Must not be greater than 191 characters.'
+        required: false
+        example: pljdyancwtuu
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      'payments[].transaction_no_6':
+        name: 'payments[].transaction_no_6'
+        description: 'Must not be greater than 191 characters.'
+        required: false
+        example: zvakqjgbcxj
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      'payments[].transaction_no_7':
+        name: 'payments[].transaction_no_7'
+        description: 'Must not be greater than 191 characters.'
+        required: false
+        example: eqvhytstjkrwgixb
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      'products.*.product_id':
+        name: 'products.*.product_id'
+        description: 'Business-owned product ID.'
+        required: true
+        example: 10
+        type: integer
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        custom: []
+      'products.*.variation_id':
+        name: 'products.*.variation_id'
+        description: 'Variation belonging to product_id.'
+        required: true
+        example: 18
+        type: integer
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        custom: []
+      'products.*.quantity':
+        name: 'products.*.quantity'
+        description: 'Positive quantity in the base unit.'
+        required: true
+        example: 5.0
+        type: number
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        custom: []
+      'products.*.unit_cost_before_discount':
+        name: 'products.*.unit_cost_before_discount'
+        description: 'Non-negative unit purchase cost before line discount.'
+        required: true
+        example: 12.5
+        type: number
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        custom: []
+      'products.*.discount_percent':
+        name: 'products.*.discount_percent'
+        description: 'Optional line discount between 0 and 100.'
+        required: false
+        example: 5.0
+        type: number
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        custom: []
+      'products.*.purchase_line_tax_id':
+        name: 'products.*.purchase_line_tax_id'
+        description: 'Optional line tax rate ID belonging to this business.'
+        required: false
+        example: 3
+        type: integer
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        custom: []
+      'products.*.lot_number':
+        name: 'products.*.lot_number'
+        description: 'Optional inventory lot number.'
+        required: false
+        example: LOT-001
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        custom: []
+      'products.*.mfg_date':
+        name: 'products.*.mfg_date'
+        description: 'Optional manufacture date.'
+        required: false
+        example: '2026-01-01'
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        custom: []
+      'products.*.exp_date':
+        name: 'products.*.exp_date'
+        description: 'Optional expiration date.'
+        required: false
+        example: '2027-01-01'
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        custom: []
+      'payments.*.amount':
+        name: 'payments.*.amount'
+        description: 'Positive payment amount in the business base currency.'
+        required: true
+        example: 10.0
+        type: number
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        custom: []
+      'payments.*.method':
+        name: 'payments.*.method'
+        description: 'Payment method enabled for the selected location, or advance.'
+        required: true
+        example: cash
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        custom: []
+      'payments.*.paid_on':
+        name: 'payments.*.paid_on'
+        description: 'Optional payment date.'
+        required: false
+        example: '2026-10-25'
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        custom: []
+      'payments.*.note':
+        name: 'payments.*.note'
+        description: 'Optional payment note.'
+        required: false
+        example: libero
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+      'payments.*.account_id':
+        name: 'payments.*.account_id'
+        description: 'Optional active account ID accessible to the user; requires account.access permission.'
+        required: false
+        example: 2
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+      'payments.*.transaction_no_1':
+        name: 'payments.*.transaction_no_1'
+        description: 'Optional transaction reference for custom_pay_1.'
+        required: false
+        example: earum
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+      'payments.*.transaction_no_2':
+        name: 'payments.*.transaction_no_2'
+        description: 'Optional transaction reference for custom_pay_2.'
+        required: false
+        example: vero
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+      'payments.*.transaction_no_3':
+        name: 'payments.*.transaction_no_3'
+        description: 'Optional transaction reference for custom_pay_3.'
+        required: false
+        example: similique
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+      'payments.*.transaction_no_4':
+        name: 'payments.*.transaction_no_4'
+        description: 'Optional transaction reference for custom_pay_4.'
+        required: false
+        example: aspernatur
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+      'payments.*.transaction_no_5':
+        name: 'payments.*.transaction_no_5'
+        description: 'Optional transaction reference for custom_pay_5.'
+        required: false
+        example: magni
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+      'payments.*.transaction_no_6':
+        name: 'payments.*.transaction_no_6'
+        description: 'Optional transaction reference for custom_pay_6.'
+        required: false
+        example: at
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+      'payments.*.transaction_no_7':
+        name: 'payments.*.transaction_no_7'
+        description: 'Optional transaction reference for custom_pay_7.'
+        required: false
+        example: amet
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+    cleanBodyParameters:
+      contact_id: 12
+      location_id: 1
+      transaction_date: '2026-10-25'
+      status: received
+      ref_no: PO-API-1001
+      exchange_rate: 1.0
+      tax_id: 2
+      discount_type: fixed
+      discount_amount: 5.0
+      shipping_charges: 3.0
+      shipping_details: placeat
+      additional_notes: vero
+      pay_term_number: 30
+      pay_term_type: days
+      custom_field_1: sunt
+      custom_field_2: at
+      custom_field_3: distinctio
+      custom_field_4: dolorem
+      shipping_custom_field_1: in
+      shipping_custom_field_2: ipsam
+      shipping_custom_field_3: vitae
+      shipping_custom_field_4: qui
+      shipping_custom_field_5: cupiditate
+      additional_expense_key_1: Freight
+      additional_expense_key_2: ipsum
+      additional_expense_key_3: dolor
+      additional_expense_key_4: velit
+      additional_expense_value_1: 2.0
+      additional_expense_value_2: 77108609.1
+      additional_expense_value_3: 276403737.6
+      additional_expense_value_4: 52.0
+      products:
+        - fugit
+      payments:
+        - quo
+    fileParameters:
+      document: null
+    responses:
+      -
+        status: 201
+        content: '{"data":{"id":1001,"ref_no":"PO-API-1001","status":"received","payment_status":"due","products":[],"payments":[]}}'
+        headers: []
+        description: ''
+        custom: []
+      -
+        status: 403
+        content: '{"error":{"message":"You are not authorized to create purchases."}}'
+        headers: []
+        description: ''
+        custom: []
+      -
+        status: 422
+        content: '{"message":"The given data was invalid.","errors":{"products.0.quantity":["The quantity must be greater than 0."]}}'
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer hafe865P1EkbvDda4c6ZV3g'
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - GET
+    uri: 'connector/api/purchase/{id}'
+    metadata:
+      groupName: 'Purchase management'
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: "Show one purchase belonging to the authenticated user's business."
+      description: ''
+      authenticated: true
+      custom: []
+    headers:
+      Authorization: 'Bearer {access_token}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      id:
+        name: id
+        description: 'The ID of the purchase.'
+        required: true
+        example: nesciunt
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+    cleanUrlParameters:
+      id: nesciunt
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 401
+        content: '{"message":"Unauthenticated."}'
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+        description: null
+        custom: []
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer gPfebadDa1hcVvZEk865346'
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - PUT
+      - PATCH
+    uri: 'connector/api/purchase/{id}'
+    metadata:
+      groupName: 'Purchase management'
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Update a purchase status and/or append payments without replacing payment history.'
+      description: ''
+      authenticated: true
+      custom: []
+    headers:
+      Authorization: 'Bearer {access_token}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      id:
+        name: id
+        description: 'Purchase ID.'
+        required: true
+        example: 1001
+        type: integer
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        custom: []
+    cleanUrlParameters:
+      id: 1001
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      status:
+        name: status
+        description: 'Optional received, pending, ordered, or draft.'
+        required: false
+        example: received
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        custom: []
+      payments:
+        name: payments
+        description: 'Optional new payments to append; existing payments are preserved.'
+        required: false
+        example:
+          - beatae
+        type: 'string[]'
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+      'payments[].amount':
+        name: 'payments[].amount'
+        description: ''
+        required: true
+        example: 1733325.0
+        type: number
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+      'payments[].method':
+        name: 'payments[].method'
+        description: ''
+        required: true
+        example: aut
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+      'payments[].paid_on':
+        name: 'payments[].paid_on'
+        description: 'Must be a valid date.'
+        required: false
+        example: '2026-11-19T10:52:14'
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      'payments[].note':
+        name: 'payments[].note'
+        description: 'Must not be greater than 1000 characters.'
+        required: false
+        example: pltgpgui
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      'payments[].account_id':
+        name: 'payments[].account_id'
+        description: 'Must be at least 1.'
+        required: false
+        example: 36
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      'payments[].transaction_no_1':
+        name: 'payments[].transaction_no_1'
+        description: 'Must not be greater than 191 characters.'
+        required: false
+        example: spnycujqnnxvmxxsyq
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      'payments[].transaction_no_2':
+        name: 'payments[].transaction_no_2'
+        description: 'Must not be greater than 191 characters.'
+        required: false
+        example: iixkihqcellnfvpwhzctdq
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      'payments[].transaction_no_3':
+        name: 'payments[].transaction_no_3'
+        description: 'Must not be greater than 191 characters.'
+        required: false
+        example: wdypctjgs
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      'payments[].transaction_no_4':
+        name: 'payments[].transaction_no_4'
+        description: 'Must not be greater than 191 characters.'
+        required: false
+        example: jzfz
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      'payments[].transaction_no_5':
+        name: 'payments[].transaction_no_5'
+        description: 'Must not be greater than 191 characters.'
+        required: false
+        example: jrcwywvv
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      'payments[].transaction_no_6':
+        name: 'payments[].transaction_no_6'
+        description: 'Must not be greater than 191 characters.'
+        required: false
+        example: fbsfuqjnpatktuny
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      'payments[].transaction_no_7':
+        name: 'payments[].transaction_no_7'
+        description: 'Must not be greater than 191 characters.'
+        required: false
+        example: ou
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      'payments.*.amount':
+        name: 'payments.*.amount'
+        description: 'Positive payment amount in the business base currency.'
+        required: true
+        example: 10.0
+        type: number
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        custom: []
+      'payments.*.method':
+        name: 'payments.*.method'
+        description: 'Payment method enabled for the purchase location, or advance.'
+        required: true
+        example: cash
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        custom: []
+      'payments.*.paid_on':
+        name: 'payments.*.paid_on'
+        description: 'Optional payment date.'
+        required: false
+        example: '2026-10-25'
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        custom: []
+      'payments.*.note':
+        name: 'payments.*.note'
+        description: 'Optional payment note.'
+        required: false
+        example: ex
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+      'payments.*.account_id':
+        name: 'payments.*.account_id'
+        description: 'Optional active account ID accessible to the user; requires account.access permission.'
+        required: false
+        example: 12
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+      'payments.*.transaction_no_1':
+        name: 'payments.*.transaction_no_1'
+        description: 'Optional transaction reference for custom_pay_1.'
+        required: false
+        example: ab
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+      'payments.*.transaction_no_2':
+        name: 'payments.*.transaction_no_2'
+        description: 'Optional transaction reference for custom_pay_2.'
+        required: false
+        example: ullam
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+      'payments.*.transaction_no_3':
+        name: 'payments.*.transaction_no_3'
+        description: 'Optional transaction reference for custom_pay_3.'
+        required: false
+        example: provident
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+      'payments.*.transaction_no_4':
+        name: 'payments.*.transaction_no_4'
+        description: 'Optional transaction reference for custom_pay_4.'
+        required: false
+        example: asperiores
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+      'payments.*.transaction_no_5':
+        name: 'payments.*.transaction_no_5'
+        description: 'Optional transaction reference for custom_pay_5.'
+        required: false
+        example: reiciendis
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+      'payments.*.transaction_no_6':
+        name: 'payments.*.transaction_no_6'
+        description: 'Optional transaction reference for custom_pay_6.'
+        required: false
+        example: nesciunt
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+      'payments.*.transaction_no_7':
+        name: 'payments.*.transaction_no_7'
+        description: 'Optional transaction reference for custom_pay_7.'
+        required: false
+        example: quo
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+    cleanBodyParameters:
+      status: received
+      payments:
+        - beatae
+    fileParameters: []
+    responses:
+      -
+        status: 200
+        content: '{"data":{"id":1001,"status":"received","payment_status":"partial","payments":[]}}'
+        headers: []
+        description: ''
+        custom: []
+      -
+        status: 403
+        content: '{"error":{"message":"You are not authorized to update this purchase."}}'
+        headers: []
+        description: ''
+        custom: []
+      -
+        status: 404
+        content: '{"message":"Not Found"}'
+        headers: []
+        description: ''
+        custom: []
+      -
+        status: 422
+        content: '{"message":"The given data was invalid.","errors":{"payments":["New purchase payments cannot exceed the remaining purchase balance."]}}'
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer f381e4cbdDEP6g6hakVZv5a'
+    controller: null
+    method: null
+    route: null
+    custom: []

@@ -1,0 +1,143 @@
+name: 'Brand management'
+description: ''
+endpoints:
+  -
+    httpMethods:
+      - GET
+    uri: connector/api/brand
+    metadata:
+      groupName: 'Brand management'
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'List brands'
+      description: ''
+      authenticated: true
+      custom: []
+    headers:
+      Authorization: 'Bearer {access_token}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 200
+        content: |-
+          {
+          "data": [
+          {
+          "id": 1,
+          "business_id": 1,
+          "name": "Levis",
+          "description": null,
+          "created_by": 1,
+          "deleted_at": null,
+          "created_at": "2018-01-03 21:19:47",
+          "updated_at": "2018-01-03 21:19:47"
+          },
+          {
+          "id": 2,
+          "business_id": 1,
+          "name": "Espirit",
+          "description": null,
+          "created_by": 1,
+          "deleted_at": null,
+          "created_at": "2018-01-03 21:19:58",
+          "updated_at": "2018-01-03 21:19:58"
+          }
+          ]
+          }
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer DEfavdV5h6gb68Zk3a14Pec'
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - GET
+    uri: 'connector/api/brand/{id}'
+    metadata:
+      groupName: 'Brand management'
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Get the specified brand'
+      description: ''
+      authenticated: true
+      custom: []
+    headers:
+      Authorization: 'Bearer {access_token}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      id:
+        name: id
+        description: 'The ID of the brand.'
+        required: true
+        example: laudantium
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+      brand:
+        name: brand
+        description: 'comma separated ids of the brands'
+        required: true
+        example: '1'
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        custom: []
+    cleanUrlParameters:
+      id: laudantium
+      brand: '1'
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 200
+        content: |-
+          {
+          "data": [
+          {
+          "id": 1,
+          "business_id": 1,
+          "name": "Levis",
+          "description": null,
+          "created_by": 1,
+          "deleted_at": null,
+          "created_at": "2018-01-03 21:19:47",
+          "updated_at": "2018-01-03 21:19:47"
+          }
+          ]
+          }
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer ZaE3vhDkPa854b6eVdg6c1f'
+    controller: null
+    method: null
+    route: null
+    custom: []
