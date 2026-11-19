@@ -3,6 +3,7 @@
 @inject('request', 'Illuminate\Http\Request')
 @section('content')
     @php
+        $is_rtl = in_array(session()->get('user.language', config('app.locale')), config('constants.langs_rtl'));
         $username = old('username');
         $password = null;
         if (config('app.env') == 'demo') {
@@ -153,11 +154,11 @@
                                 </div>
 
                                 <input
-                                    class="tw-border tw-border-[#D1D5DA] tw-outline-none tw-h-12 tw-bg-transparent tw-rounded-lg tw-px-3 tw-font-medium tw-text-black placeholder:tw-text-gray-500 placeholder:tw-font-medium"
+                                    class="tw-border tw-border-[#D1D5DA] tw-outline-none tw-h-12 tw-bg-transparent tw-rounded-lg tw-px-3 {{ $is_rtl ? 'tw-pl-10' : 'tw-pr-10' }} tw-font-medium tw-text-black placeholder:tw-text-gray-500 placeholder:tw-font-medium"
                                     id="password" type="password" name="password" value="{{ $password }}" required
                                     placeholder="@lang('lang_v1.password')" />
                                 <button type="button" id="show_hide_icon" class="show_hide_icon"
-                                    style="position: absolute; top:48px;right:5px;">
+                                    style="position: absolute; top:48px;{{ $is_rtl ? 'left:5px;' : 'right:5px;' }}">
                                     <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-eye tw-w-6" viewBox="0 0 24 24" stroke-width="1.5" stroke="#000000" fill="none" stroke-linecap="round" stroke-linejoin="round">
                                         <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
                                         <path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" />

@@ -100,7 +100,20 @@
                     $('#stock_history_table').DataTable({
                         searching: false,
                         fixedHeader:false,
-                        ordering: false
+                        ordering: false,
+                        dom: 'Bfrtip',
+                        buttons: [{
+                            extend: 'csvHtml5',
+                            text: 'CSV',
+                            filename: 'product-stock-history',
+                            exportOptions: {
+                                format: {
+                                    body: function(data) {
+                                        return $('<div>').html(data).text().trim();
+                                    }
+                                }
+                            }
+                        }]
                     });
                 },
             });

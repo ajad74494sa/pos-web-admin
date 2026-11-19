@@ -119,6 +119,95 @@ class ReportController extends Controller
     }
 
     /**
+     * Shows the Z report (total sales in hand) for a business.
+     */
+    public function getZReport(Request $request)
+    {
+        if (! auth()->user()->can('profit_loss_report.view')) {
+            abort(403, 'Unauthorized action.');
+        }
+
+        $business_id = $request->session()->get('user.business_id');
+
+        if ($request->ajax()) {
+            $fy = $this->businessUtil->getCurrentFinancialYear($business_id);
+            $location_id = ! empty($request->input('location_id')) ? $request->input('location_id') : null;
+            $start_date = ! empty($request->input('start_date')) ? $request->input('start_date') : $fy['start'];
+            $end_date = ! empty($request->input('end_date')) ? $request->input('end_date') : $fy['end'];
+            $permitted_locations = auth()->user()->permitted_locations();
+
+            $sell_details = $this->transactionUtil->getSellTotals(
+                $business_id,
+                $start_date,
+                $end_date,
+                $location_id,
+                null,
+                $permitted_locations
+            );
+            $purchase_details = $this->transactionUtil->getPurchaseTotals(
+                $business_id,
+                $start_date,
+                $end_date,
+                $location_id,
+                null,
+                $permitted_locations
+            );
+            $transaction_totals = $this->transactionUtil->getTransactionTotals(
+                $business_id,
+                ['sell', 'purchase', 'sell_return', 'purchase_return', 'expense'],
+                $start_date,
+                $end_date,
+                $location_id,
+                null,
+                $permitted_locations
+            );
+
+            $sell_line_discount = $this->transactionUtil->getTotalSellLineDiscount(
+                $business_id,
+                $start_date,
+                $end_date,
+                $location_id,
+                null,
+                $permitted_locations
+            );
+            $purchase_line_discount = $this->transactionUtil->getTotalPurchaseLineDiscount(
+                $business_id,
+                $start_date,
+                $end_date,
+                $location_id,
+                null,
+                $permitted_locations
+            );
+
+            $data = [
+                'total_item_sales' => $sell_details['total_sell_exc_tax'] + $sell_line_discount,
+                'sell_discount' => $transaction_totals['total_sell_discount'] + $sell_line_discount,
+                'total_sell_return' => $transaction_totals['total_sell_return_inc_tax'],
+                'total_purchase' => $purchase_details['total_purchase_exc_tax'] + $purchase_line_discount,
+                'purchase_discount' => $transaction_totals['total_purchase_discount'] + $purchase_line_discount,
+                'total_purchase_return' => $transaction_totals['total_purchase_return_inc_tax'],
+                'total_delivery_charge' => $sell_details['total_shipping_charges'],
+                'total_expense' => $transaction_totals['total_expense'],
+            ];
+
+            $data['total_sales_in_hand'] = $data['total_item_sales']
+                - $data['sell_discount']
+                - $data['total_sell_return']
+                - $data['total_purchase']
+                + $data['purchase_discount']
+                + $data['total_purchase_return']
+                + $data['total_delivery_charge']
+                - $data['total_expense'];
+
+            return view('report.partials.z_report_data', compact('data'))->render();
+        }
+
+        $business_locations = BusinessLocation::forDropdown($business_id, true);
+
+        return view('report.z_report', compact('business_locations'));
+    }
+
+    /**
      * Shows product report of a business
      *
      * @return \Illuminate\Http\Response

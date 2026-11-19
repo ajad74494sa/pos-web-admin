@@ -45,7 +45,17 @@
     <script type="text/javascript">
         $(document).ready(function() {
             $('.change_lang').click(function() {
-                window.location = "{{ route('business.getRegister') }}?lang=" + $(this).attr('value');
+                /*
+                 * Only the lang parameter is replaced, the rest of the query is
+                 * kept. Rebuilding the url from scratch used to drop everything
+                 * else on it: the affiliate referral code, and the package the
+                 * visitor picked before landing here.
+                 */
+                var url = new URL(window.location.href);
+
+                url.searchParams.set('lang', $(this).attr('value'));
+
+                window.location = url.toString();
             });
         })
     </script>

@@ -39,7 +39,7 @@
 </head>
 <body
     class="tw-font-sans tw-antialiased tw-text-gray-900 tw-bg-gray-100 @if ($pos_layout) hold-transition lockscreen @else hold-transition skin-@if (!empty(session('business.theme_color'))){{ session('business.theme_color') }}@else{{ 'blue-light' }} @endif sidebar-mini @endif" >
-    <div class="tw-flex thetop">
+    <div class="tw-flex thetop tw-h-screen tw-overflow-hidden">
         <script type="text/javascript">
             if (localStorage.getItem("upos_sidebar_collapse") == 'true') {
                 var body = document.getElementsByTagName("body")[0];
@@ -149,7 +149,15 @@
             overflow: visible !important;
             height: auto !important;
         }
-        
+
+        /* The viewport lock used on screen must not clip the printout */
+        .thetop,
+        .thetop > main {
+            height: auto !important;
+            max-height: none !important;
+            overflow: visible !important;
+        }
+
         /* Hide side menu */
         .side-bar,
         .thetop > aside {
@@ -186,7 +194,67 @@
     #scrollable-container{
         position:relative;
     }
-    
+
+    /*
+     * Viewport-locked shell: the window itself never scrolls. The sidebar menu and
+     * the content area each own their own scrollbar, so reaching the bottom menu
+     * items only moves the sidebar.
+     */
+    .thetop {
+        height: 100vh;
+        height: 100dvh;
+        overflow: hidden;
+    }
+
+    .side-bar {
+        height: 100vh;
+        height: 100dvh;
+    }
+
+    /*
+     * The help tour releases the lock so its popovers are not clipped by the
+     * scroll containers - that restores the plain full page scroll.
+     */
+    .thetop.tour-unlock-scroll,
+    .thetop.tour-unlock-scroll > main,
+    .thetop.tour-unlock-scroll > .side-bar {
+        height: auto;
+        overflow: visible;
+    }
+
+    /* Only the menu list scrolls - logo and search stay pinned. */
+    #side-bar {
+        overscroll-behavior: contain;
+        scrollbar-width: thin;
+        scrollbar-color: #cdd5df transparent;
+    }
+
+    /*
+     * Keeps a stray horizontal scrollbar away, but only while the menu is the
+     * scroll container - overflow-x alone would force overflow-y back to auto
+     * and re-clip the tour popovers.
+     */
+    #side-bar.tw-overflow-y-auto {
+        overflow-x: hidden;
+    }
+
+    #side-bar::-webkit-scrollbar {
+        width: 6px;
+    }
+
+    #side-bar::-webkit-scrollbar-track {
+        background: transparent;
+    }
+
+    #side-bar::-webkit-scrollbar-thumb {
+        background-color: #cdd5df;
+        border-radius: 9999px;
+    }
+
+    #side-bar::-webkit-scrollbar-thumb:hover {
+        background-color: #9aa4b2;
+    }
+
 
 
 

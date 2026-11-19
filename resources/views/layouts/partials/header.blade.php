@@ -1,4 +1,7 @@
 @inject('request', 'Illuminate\Http\Request')
+@php
+    $is_rtl = in_array(session()->get('user.language', config('app.locale')), config('constants.langs_rtl'));
+@endphp
 <!-- Main Header -->
 
 <div
@@ -200,21 +203,37 @@
                         class="tw-dw-m-1 tw-inline-flex tw-transition-all tw-ring-1 tw-ring-white/10 tw-cursor-pointer tw-duration-200 theme-btn-bg tw-py-1.5 tw-px-3 tw-rounded-lg tw-items-center tw-justify-center tw-text-sm tw-font-medium tw-text-white hover:tw-text-white tw-gap-1">
                         <span class="tw-hidden md:tw-block">{{ Auth::User()->first_name }} {{ Auth::User()->last_name }}</span>
 
-                        <svg  xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="tw-size-5"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0 -18 0" /><path d="M12 10m-3 0a3 3 0 1 0 6 0a3 3 0 1 0 -6 0" /><path d="M6.168 18.849a4 4 0 0 1 3.832 -2.849h4a4 4 0 0 1 3.834 2.855" /></svg>
+                        @php $__profile_media = Auth::user()->media; @endphp
+                        @if (!empty($__profile_media))
+                            <img src="{{ $__profile_media->display_url }}"
+                                alt="{{ Auth::User()->first_name }} {{ Auth::User()->last_name }}"
+                                class="tw-size-5 tw-rounded-full tw-object-cover">
+                        @else
+                            <svg  xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="tw-size-5"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0 -18 0" /><path d="M12 10m-3 0a3 3 0 1 0 6 0a3 3 0 1 0 -6 0" /><path d="M6.168 18.849a4 4 0 0 1 3.832 -2.849h4a4 4 0 0 1 3.834 2.855" /></svg>
+                        @endif
 
                         
                         
                     </summary>
 
-                    <ul class="tw-p-2 tw-w-48 tw-absolute tw-right-0 tw-z-10 tw-mt-2 tw-origin-top-right tw-bg-white tw-rounded-lg tw-shadow-lg tw-ring-1 tw-ring-gray-200 focus:tw-outline-none"
+                    <ul class="tw-p-2 tw-w-48 tw-absolute {{ $is_rtl ? 'tw-left-0' : 'tw-right-0' }} tw-z-10 tw-mt-2 tw-origin-top-right tw-bg-white tw-rounded-lg tw-shadow-lg tw-ring-1 tw-ring-gray-200 focus:tw-outline-none"
                         role="menu" tabindex="-1">
-                        <div class="tw-px-4 tw-pt-3 tw-pb-1" role="none">
-                            <p class="tw-text-sm" role="none">
-                                @lang('lang_v1.signed_in_as')
-                            </p>
-                            <p class="tw-text-sm tw-font-medium tw-text-gray-900 tw-truncate" role="none">
-                                {{ Auth::User()->first_name }} {{ Auth::User()->last_name }}
-                            </p>
+                        <div class="tw-px-4 tw-pt-3 tw-pb-1 tw-flex tw-items-center tw-justify-between tw-gap-2" role="none">
+                            <div class="tw-min-w-0" role="none">
+                                <p class="tw-text-sm" role="none">
+                                    @lang('lang_v1.signed_in_as')
+                                </p>
+                                <p class="tw-text-sm tw-font-medium tw-text-gray-900 tw-truncate" role="none">
+                                    {{ Auth::User()->first_name }} {{ Auth::User()->last_name }}
+                                </p>
+                            </div>
+                            @if (!empty($__profile_media))
+                                <img src="{{ $__profile_media->display_url }}"
+                                    alt="{{ Auth::User()->first_name }} {{ Auth::User()->last_name }}"
+                                    class="tw-size-9 tw-rounded-full tw-object-cover tw-shrink-0">
+                            @else
+                                <svg  xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="tw-size-5 tw-shrink-0 tw-text-gray-600"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0 -18 0" /><path d="M12 10m-3 0a3 3 0 1 0 6 0a3 3 0 1 0 -6 0" /><path d="M6.168 18.849a4 4 0 0 1 3.832 -2.849h4a4 4 0 0 1 3.834 2.855" /></svg>
+                            @endif
                         </div>
 
                         <li>

@@ -715,7 +715,9 @@
 					<tr>
 						<td>{{$payment['method']}}</td>
 						<td>{{$payment['amount']}}</td>
-						<td>{{$payment['date']}}</td>
+						@if(!empty($payment['date']))
+							<td>{{$payment['date']}}</td>
+						@endif
 					</tr>
 				@endforeach
 			@endif

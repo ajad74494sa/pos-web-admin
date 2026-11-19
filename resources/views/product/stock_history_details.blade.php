@@ -147,9 +147,20 @@
 						@endif
 					</td>
 					<td>
-						{{$history['contact_name'] ?? '--'}} 
+						@if(!empty($history['contact_name']))
+							{{ $history['contact_name'] }}
+						@endif
+
+						@if(!empty($history['contact_name']) && !empty($history['supplier_business_name']))
+							-
+						@endif
+
 						@if(!empty($history['supplier_business_name']))
-						 - {{$history['supplier_business_name']}}
+							{{ $history['supplier_business_name'] }}
+						@endif
+
+						@if(empty($history['contact_name']) && empty($history['supplier_business_name']))
+							--
 						@endif
 					</td>
 				</tr>

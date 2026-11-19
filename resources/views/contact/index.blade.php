@@ -116,10 +116,7 @@
             'class' => 'box-primary',
             'title' => __('contact.all_your_contact', ['contacts' => __('lang_v1.' . $type . 's')]),
         ])
-            @if (auth()->user()->can('supplier.create') ||
-                    auth()->user()->can('customer.create') ||
-                    auth()->user()->can('supplier.view_own') ||
-                    auth()->user()->can('customer.view_own'))
+            @if (auth()->user()->can('supplier.create') || auth()->user()->can('customer.create'))
                 @slot('tool')
                     <div class="box-tools">
                         <a class="tw-dw-btn tw-bg-gradient-to-r tw-from-indigo-600 tw-to-blue-500 tw-font-bold tw-text-white tw-border-none tw-rounded-full btn-modal"

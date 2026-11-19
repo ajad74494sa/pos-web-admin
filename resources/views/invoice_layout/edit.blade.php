@@ -857,6 +857,15 @@
               </div>
           </div>
         </div>
+        <div class="col-sm-3">
+          <div class="form-group">
+            <div class="checkbox">
+              <label>
+                {!! Form::checkbox('common_settings[hide_payment_date]', 1, !empty($invoice_layout->common_settings['hide_payment_date']), ['class' => 'input-icheck']); !!} @lang('invoice.hide_payment_date')</label>
+                @show_tooltip(__('invoice.hide_payment_date_help'))
+              </div>
+          </div>
+        </div>
 
         <!-- Barcode -->
         <div class="col-sm-3">

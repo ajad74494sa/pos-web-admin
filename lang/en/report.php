@@ -12,6 +12,18 @@ return [
     */
 
     'reports' => 'Reports',
+    'z_report' => 'Z Report',
+    'z_report_msg' => 'Total sales in hand for the selected date range',
+    'label' => 'Label',
+    'amount' => 'Amount',
+    'total_item_sales' => 'Total Item Sales',
+    'incl_discount' => 'Including Discount',
+    'sell_returns' => 'Sell Returns',
+    'purchases' => 'Purchases',
+    'purchase_returns' => 'Purchase Returns',
+    'delivery_charge' => 'Delivery Charge',
+    'expenses' => 'Expenses',
+    'total_sales_in_hand' => 'Total Sales in Hand',
     'purchase_sell_report' => 'Purchase & Sale',
     'purchase_sell' => 'Purchase & Sale Report',
     'purchase_sell_msg' => 'Purchase & sale details for the selected date range',

@@ -2848,6 +2848,60 @@ class TransactionUtil extends Util
         return $query;
     }
 
+    /**
+     * Get the total line-level discount for sells in the selected period.
+     */
+    public function getTotalSellLineDiscount($business_id, $start_date = null, $end_date = null, $location_id = null, $created_by = null, $permitted_locations = null)
+    {
+        $query = $this->getSellLinesQuery($business_id, [
+            'location_id' => $location_id,
+            'created_by' => $created_by,
+            'permitted_locations' => $permitted_locations,
+        ]);
+
+        if (! empty($start_date) && ! empty($end_date)) {
+            $query->whereDate('t.transaction_date', '>=', $start_date)
+                ->whereDate('t.transaction_date', '<=', $end_date);
+        }
+
+        $result = $query->select(
+            DB::raw('SUM((transaction_sell_lines.unit_price_before_discount - transaction_sell_lines.unit_price) * transaction_sell_lines.quantity) as total_line_discount')
+        )->first();
+
+        return ! empty($result->total_line_discount) ? $result->total_line_discount : 0;
+    }
+
+    /**
+     * Get the total line-level discount for purchases in the selected period.
+     */
+    public function getTotalPurchaseLineDiscount($business_id, $start_date = null, $end_date = null, $location_id = null, $created_by = null, $permitted_locations = null)
+    {
+        $query = PurchaseLine::join('transactions as t', 'purchase_lines.transaction_id', '=', 't.id')
+            ->where('t.business_id', $business_id)
+            ->where('t.type', 'purchase')
+            ->select(
+                DB::raw('SUM((purchase_lines.pp_without_discount - purchase_lines.purchase_price) * purchase_lines.quantity) as total_line_discount')
+            );
+
+        if (! empty($permitted_locations) && $permitted_locations != 'all') {
+            $query->whereIn('t.location_id', $permitted_locations);
+        }
+        if (! empty($start_date) && ! empty($end_date)) {
+            $query->whereDate('t.transaction_date', '>=', $start_date)
+                ->whereDate('t.transaction_date', '<=', $end_date);
+        }
+        if (! empty($location_id)) {
+            $query->where('t.location_id', $location_id);
+        }
+        if (! empty($created_by)) {
+            $query->where('t.created_by', $created_by);
+        }
+
+        $result = $query->first();
+
+        return ! empty($result->total_line_discount) ? $result->total_line_discount : 0;
+    }
+
     public function getTotalLedgerDiscount($business_id, $start_date = null, $end_date = null)
     {
         $query = Transaction::where('transactions.business_id', $business_id)

@@ -3018,8 +3018,11 @@ $(document).on('change', '.payment_types_dropdown', function(e) {
     var payment_type = $(this).val();
     var payment_row = $(this).closest('.payment_row');
     if (payment_type && payment_type != 'advance') {
-        var default_account = default_accounts && default_accounts[payment_type]['account'] ? 
-            default_accounts[payment_type]['account'] : '';
+        var default_account = default_accounts
+            && default_accounts[payment_type]
+            && default_accounts[payment_type]['account']
+            ? default_accounts[payment_type]['account']
+            : '';
         var row_index = payment_row.find('.payment_row_index').val();
 
         var account_dropdown = payment_row.find('select#account_' + row_index);

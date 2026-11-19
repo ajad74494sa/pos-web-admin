@@ -568,6 +568,11 @@ class AdminSidebarMenu
                                 __('report.profit_loss'),
                                 ['icon' => '', 'active' => request()->segment(2) == 'profit-loss']
                             );
+                            $sub->url(
+                                action([\App\Http\Controllers\ReportController::class, 'getZReport']),
+                                __('report.z_report'),
+                                ['icon' => '', 'active' => request()->segment(2) == 'z-report']
+                            );
                         }
                         if (config('constants.show_report_606') == true) {
                             $sub->url(

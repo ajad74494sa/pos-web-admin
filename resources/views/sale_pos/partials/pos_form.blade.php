@@ -208,6 +208,9 @@
 	<div class="col-sm-12 pos_product_div" style="padding:4px 0 0 0;">
 		<input type="hidden" name="sell_price_tax" id="sell_price_tax" value="{{$business_details->sell_price_tax}}">
 
+		<!-- Renders the serial no. cell on each product row -->
+		<input type="hidden" name="is_serial_no" value="1">
+
 		<!-- Keeps count of product rows -->
 		<input type="hidden" id="product_row_count" 
 			value="0">
@@ -220,6 +223,7 @@
 		<table class="table table-condensed table-responsive tw-border-0 tw-table-fixed" id="pos_table">
 			<thead>
 				<tr>
+					<th class="text-center pos-th-sr-no tw-sticky tw-top-0 tw-z-10 !tw-bg-[#f8fafc] !tw-text-[#94a3b8] !tw-border-b !tw-border-[#e2e8f0] !tw-border-t-0 !tw-border-l-0 !tw-border-r-0 !tw-py-1 !tw-text-[11px] tw-font-bold tw-uppercase tw-tracking-[0.4px] !tw-leading-[1.2] tw-whitespace-nowrap tw-overflow-hidden !tw-align-middle">#</th>
 					<th class="text-center pos-th-product tw-sticky tw-top-0 tw-z-10 !tw-bg-[#f8fafc] !tw-text-[#94a3b8] !tw-border-b !tw-border-[#e2e8f0] !tw-border-t-0 !tw-border-l-0 !tw-border-r-0 !tw-px-2 !tw-py-1 !tw-text-[11px] tw-font-bold tw-uppercase tw-tracking-[0.4px] !tw-leading-[1.2] tw-whitespace-nowrap tw-overflow-hidden !tw-align-middle tw-w-[30%]">
 						@lang('sale.product') @show_tooltip(__('lang_v1.tooltip_sell_product_column'))
 					</th>
