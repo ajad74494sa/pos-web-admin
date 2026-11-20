@@ -4,11 +4,14 @@
 @section('content')
     <style>
         .login-page-grid {
+            box-sizing: border-box;
             display: grid;
-            grid-template-columns: minmax(0, 1fr) minmax(360px, 0.9fr);
+            grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
+            width: 100%;
             max-width: 1080px;
-            min-height: 570px;
-            margin: 0 auto;
+            min-height: min(570px, calc(100vh - 160px));
+            min-height: min(570px, calc(100svh - 160px));
+            margin: auto;
             overflow: hidden;
             border-radius: 28px;
             background: #fff;
@@ -21,7 +24,7 @@
             flex-direction: column;
             justify-content: center;
             min-width: 0;
-            padding: 48px;
+            padding: clamp(28px, 5vw, 48px);
             overflow: hidden;
             color: #fff;
             background: linear-gradient(145deg, #172554 0%, #3730a3 58%, #4f46e5 100%);
@@ -53,6 +56,7 @@
         .login-brand-content {
             position: relative;
             z-index: 1;
+            text-align: center;
         }
 
         .login-brand-logo {
@@ -61,7 +65,7 @@
             justify-content: center;
             width: 64px;
             height: 64px;
-            margin-bottom: 32px;
+            margin: 0 auto 32px;
             border-radius: 18px;
             background: rgba(255, 255, 255, .14);
             box-shadow: inset 0 1px 0 rgba(255, 255, 255, .22);
@@ -84,6 +88,7 @@
         .login-brand-features {
             display: flex;
             flex-wrap: wrap;
+            justify-content: center;
             gap: 10px;
             margin-top: 24px;
         }
@@ -103,7 +108,7 @@
         .login-brand-rule {
             width: 52px;
             height: 4px;
-            margin-top: 28px;
+            margin: 28px auto 0;
             border-radius: 4px;
             background: #a5b4fc;
         }
@@ -113,7 +118,7 @@
             align-items: center;
             justify-content: center;
             min-width: 0;
-            padding: 48px;
+            padding: clamp(28px, 5vw, 48px);
         }
 
         .login-form-card {
@@ -235,34 +240,39 @@
             box-shadow: none;
         }
 
-        @media (max-width: 767px) {
+        @media (max-width: 800px) {
             .login-page-grid {
                 display: flex;
                 flex-direction: column;
+                width: min(100%, 560px);
                 min-height: 0;
-                margin: 0 12px;
+                margin: 12px auto 24px;
                 border-radius: 20px;
             }
 
             .login-side-panel {
-                min-height: 170px;
-                padding: 24px;
+                min-height: 0;
+                padding: 22px 24px;
             }
 
             .login-brand-logo {
-                width: 48px;
-                height: 48px;
-                margin-bottom: 16px;
-                border-radius: 14px;
+                width: 52px;
+                height: 52px;
+                margin-bottom: 12px;
+                border-radius: 15px;
             }
 
             .login-brand-content h2 {
                 font-size: 24px;
             }
 
+            .login-brand-rule {
+                margin-top: 16px;
+            }
+
             .login-brand-features {
                 gap: 8px;
-                margin-top: 16px;
+                margin-top: 14px;
             }
 
             .login-brand-features span {
@@ -271,11 +281,138 @@
             }
 
             .login-form-panel {
-                padding: 30px 24px;
+                padding: 28px clamp(20px, 6vw, 36px) 32px;
+            }
+
+            .login-form-card h2 {
+                margin-bottom: 24px;
             }
 
             .login-demo-panel {
                 max-height: none;
+            }
+        }
+
+        @media (max-width: 640px) {
+            .login-page-grid {
+                margin-top: 0;
+                margin-bottom: 12px;
+                border-radius: 18px;
+            }
+
+            .login-side-panel {
+                padding: 12px 18px;
+            }
+
+            .login-brand-content {
+                display: grid;
+                grid-template-columns: 44px minmax(0, 1fr);
+                align-items: center;
+                column-gap: 12px;
+                text-align: left;
+            }
+
+            .login-brand-logo {
+                grid-row: 1;
+                width: 44px;
+                height: 44px;
+                margin: 0;
+                border-radius: 12px;
+            }
+
+            .login-brand-logo img {
+                max-width: 34px;
+                max-height: 34px;
+            }
+
+            .login-brand-content h2 {
+                grid-column: 2;
+                margin: 0;
+                font-size: 20px;
+            }
+
+            .login-brand-features,
+            .login-brand-rule {
+                display: none;
+            }
+
+            .login-form-panel {
+                padding: 18px 20px 20px;
+            }
+
+            .login-form-inner {
+                gap: 12px !important;
+                padding: 0 !important;
+            }
+
+            .login-form-card h1 {
+                font-size: 24px;
+            }
+
+            .login-form-card h2 {
+                margin: 4px 0 14px;
+            }
+
+            .login-form-card .form-group {
+                margin-bottom: 12px;
+            }
+
+            .login-form-card .tw-dw-label {
+                margin-bottom: 4px;
+            }
+
+            .login-form-card input[type="text"],
+            .login-form-card input[type="password"] {
+                height: 44px;
+            }
+
+            .login-form-card .login-submit {
+                height: 44px;
+                margin-top: 4px;
+            }
+
+            .login-form-card .login-register-link {
+                margin-top: 0;
+            }
+        }
+
+        @media (max-width: 380px) {
+            .login-side-panel {
+                padding-right: 14px;
+                padding-left: 14px;
+            }
+
+            .login-form-panel {
+                padding-right: 16px;
+                padding-left: 16px;
+            }
+
+            .login-form-card h1 {
+                font-size: 22px;
+            }
+        }
+
+        @media (max-width: 640px) and (max-height: 720px) {
+            .login-side-panel {
+                padding-top: 8px;
+                padding-bottom: 8px;
+            }
+
+            .login-form-panel {
+                padding-top: 12px;
+                padding-bottom: 14px;
+            }
+
+            .login-form-inner {
+                gap: 8px !important;
+            }
+
+            .login-form-card h2 {
+                margin-bottom: 8px;
+            }
+
+            .login-form-card .form-group {
+                margin-bottom: 8px;
             }
         }
     </style>
@@ -381,9 +518,9 @@
         @else
             <div class="login-brand-content">
                 <div class="login-brand-logo">
-                    <img src="{{ asset('img/logo-small.png') }}" alt="{{ config('app.name', 'POS') }}">
+                    <img src="{{ asset('uploads/cms/logo.png') }}" alt="KR Soft Pos">
                 </div>
-                <h2>{{ config('app.name', 'ultimatePOS') }}</h2>
+                <h2>{{ config('app.name', 'KR Soft Pos') }}</h2>
                 <div class="login-brand-features">
                     <span><i class="fas fa-cash-register" aria-hidden="true"></i> @lang('sale.pos_sale')</span>
                     <span><i class="fas fa-boxes" aria-hidden="true"></i> @lang('sale.products')</span>
@@ -395,13 +532,13 @@
         </div>
         <div class="login-form-panel">
             <div class="login-form-card" dir="{{ $is_rtl ? 'rtl' : 'ltr' }}">
-                <div class="tw-flex tw-flex-col tw-gap-4 tw-dw-rounded-box tw-dw-p-6 tw-dw-max-w-md">
+                <div class="login-form-inner tw-flex tw-flex-col tw-gap-4 tw-dw-rounded-box tw-dw-p-6 tw-dw-max-w-md">
                     <div class="tw-flex tw-items-center tw-flex-col">
                         <h1>
                             @lang('lang_v1.welcome_back')
                         </h1>
                         <h2>
-                            @lang('lang_v1.login_to_your') {{ config('app.name', 'ultimatePOS') }}
+                            @lang('lang_v1.login_to_your') {{ config('app.name', 'KR Soft Pos') }}
                         </h2>
                     </div>
 
@@ -415,7 +552,7 @@
                                 </div>
 
                                 <input
-                                    name="username" required autofocus placeholder="@lang('lang_v1.username')"
+                                    name="username" required autocomplete="username" placeholder="@lang('lang_v1.username')"
                                     data-last-active-input="" id="username" type="text"
                                     value="{{ $username }}" />
                                 @if ($errors->has('username'))
@@ -439,7 +576,7 @@
                                 </div>
 
                                 <input
-                                    id="password" type="password" name="password" value="{{ $password }}" required
+                                    id="password" type="password" name="password" value="{{ $password }}" required autocomplete="current-password"
                                     placeholder="@lang('lang_v1.password')" />
                                 <button type="button" id="show_hide_icon" class="show_hide_icon"
                                     style="position: absolute;">
