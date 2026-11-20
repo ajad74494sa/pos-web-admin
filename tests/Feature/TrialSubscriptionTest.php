@@ -54,6 +54,12 @@ class TrialSubscriptionTest extends TestCase
             $table->softDeletes();
             $table->timestamps();
         });
+
+        Schema::create('system', function (Blueprint $table) {
+            $table->increments('id');
+            $table->string('key')->unique();
+            $table->text('value')->nullable();
+        });
     }
 
     protected function tearDown(): void
@@ -81,6 +87,7 @@ class TrialSubscriptionTest extends TestCase
             'product_count' => 0,
             'invoice_count' => 0,
             'trial_days' => 14,
+            'price' => 99.99,
             'custom_permissions' => ['manufacturing_module' => 1, 'woocommerce_module' => 1],
         ]);
         $package->id = 5;
@@ -103,9 +110,7 @@ class TrialSubscriptionTest extends TestCase
         $moduleUtil->shouldReceive('isSubscribed')->with(41)->andReturn(false);
         $this->app->instance(ModuleUtil::class, $moduleUtil);
 
-        $user = Mockery::mock(User::class);
-        $user->business_id = 41;
-        $user->shouldReceive('can')->with('superadmin')->andReturn(false);
+        $user = $this->makeBusinessUser();
 
         $writeResponse = $this->runMiddleware($user, 'POST', '/connector/api/purchase', 'store', true);
         $this->assertSame(402, $writeResponse->getStatusCode());
@@ -124,9 +129,7 @@ class TrialSubscriptionTest extends TestCase
         $moduleUtil->shouldReceive('isSubscribed')->with(41)->andReturn(false);
         $this->app->instance(ModuleUtil::class, $moduleUtil);
 
-        $user = Mockery::mock(User::class);
-        $user->business_id = 41;
-        $user->shouldReceive('can')->with('superadmin')->andReturn(false);
+        $user = $this->makeBusinessUser();
 
         $response = $this->runMiddleware($user, 'GET', '/products/activate/1', 'activate', true);
 
@@ -137,7 +140,11 @@ class TrialSubscriptionTest extends TestCase
     {
         $server = $expectsJson ? ['HTTP_ACCEPT' => 'application/json'] : [];
         $request = Request::create($path, $method, [], [], [], $server);
-        $route = new Route([$method], ltrim($path, '/'), ['uses' => 'Tests\Feature\TrialSubscriptionTest@'.$action]);
+        $controller = self::class.'@'.$action;
+        $route = new Route([$method], ltrim($path, '/'), [
+            'uses' => $controller,
+            'controller' => $controller,
+        ]);
         $request->setUserResolver(function () use ($user) {
             return $user;
         });
@@ -148,5 +155,18 @@ class TrialSubscriptionTest extends TestCase
         return app(EnforceActiveSubscription::class)->handle($request, function () {
             return response('allowed', 200);
         });
+    }
+
+    private function makeBusinessUser(): User
+    {
+        $user = new class extends User {
+            public function can($abilities, $arguments = [])
+            {
+                return false;
+            }
+        };
+        $user->business_id = 41;
+
+        return $user;
     }
 }
