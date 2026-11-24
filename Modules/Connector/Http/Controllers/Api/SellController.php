@@ -652,7 +652,7 @@ class SellController extends ApiController
      * Create sell
      *
      * @bodyParam sells.*.location_id int required id of the business location Example: 1
-     * @bodyParam sells.*.contact_id int required id of the customer
+     * @bodyParam sells.*.contact_id int id of the customer. If omitted, the business default customer is used.
      * @bodyParam sells.*.transaction_date string transaction date format:Y-m-d H:i:s, Example: 2020-07-22 15:48:29
      * @bodyParam sells.*.invoice_no string Invoice number
      * @bodyParam sells.*.source string Source of the invoice Example: api, phone, woocommerce
@@ -914,6 +914,17 @@ class SellController extends ApiController
                 try {
                     DB::beginTransaction();
                     $sell_data['business_id'] = $user->business_id;
+
+                    if (empty($sell_data['contact_id']) || (string) $sell_data['contact_id'] === '1') {
+                        $default_customer = $this->contactUtil->getWalkInCustomer($business_id);
+
+                        if (empty($default_customer['id'])) {
+                            throw new \Exception('No default customer is configured for this business. Please create or mark a customer as the default customer before making a sale.');
+                        }
+
+                        $sell_data['contact_id'] = $default_customer['id'];
+                    }
+
                     $input = $this->__formatSellData($sell_data);
 
                     //TODO: temporarily used false to bypass the check, bcz of session issue in can_access_this_location function
