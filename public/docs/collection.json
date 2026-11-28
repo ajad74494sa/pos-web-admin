@@ -4598,7 +4598,7 @@
         },
         {
             "name": "Report management",
-            "description": "",
+            "description": "Requires API authentication and report permissions. Requests are limited to 20 per minute per authenticated user; exceeding this limit returns HTTP 429 with a Retry-After header.",
             "item": [
                 {
                     "name": "List finalized sales for the authenticated business.",

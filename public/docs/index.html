@@ -21934,6 +21934,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
                 <h1 id="report-management">Report management</h1>
 
+<p>Each authenticated user is limited to 20 requests per minute across these report endpoints. Requests over the limit return <code>429 Too Many Requests</code> with a <code>Retry-After</code> header.</p>
 
 
                                 <h2 id="report-management-GETconnector-api-reports-sales">List finalized sales for the authenticated business.</h2>

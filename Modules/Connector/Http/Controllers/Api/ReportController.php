@@ -40,6 +40,7 @@ class ReportController extends ApiController
      * @response 200 {"current_page":1,"data":[{"id":123,"location_id":1,"customer":{"id":45,"name":"Example Customer","supplier_business_name":null,"contact_id":"CUST-0045"},"invoice_no":"INV-0123","transaction_date":"2026-10-25 10:30:00","total_before_tax":"100.0000","discount_amount":"0.0000","tax_amount":"5.0000","final_total":"105.0000","payment_status":"paid","payment_methods":["cash"]}],"per_page":10,"total":1}
      * @response 403 {"error":{"message":"Unauthorized action."}}
      * @response 422 {"message":"The given data was invalid.","errors":{"start_date":["The start date does not match the format Y-m-d."]}}
+     * @response 429 {"message":"Too Many Attempts."}
      */
     public function sales(Request $request)
     {
@@ -128,6 +129,7 @@ class ReportController extends ApiController
      * @response 200 {"current_page":1,"data":[{"id":567,"amount":"105.0000","is_return":0,"method":"cash","paid_on":"2026-10-25 10:30:00","payment_ref_no":null,"transaction_no":null,"transaction_id":123,"invoice_no":"INV-0123","customer_id":45,"customer_name":"Example Customer","customer_business_name":null}],"per_page":10,"total":1}
      * @response 403 {"error":{"message":"Unauthorized action."}}
      * @response 422 {"message":"The given data was invalid.","errors":{"start_date":["The start date does not match the format Y-m-d."]}}
+     * @response 429 {"message":"Too Many Attempts."}
      */
     public function salesPayments(Request $request)
     {
@@ -254,6 +256,7 @@ class ReportController extends ApiController
      * @response 200 {"current_page":1,"data":[{"id":789,"transaction_id":123,"invoice_no":"INV-0123","transaction_date":"2026-10-25 10:30:00","location_id":1,"customer_id":45,"customer_name":"Example Customer","product_id":10,"product_name":"Example Product","sku":"SKU-0010","product_variation":"Size","variation_name":"Large","sub_sku":"SKU-0010-L","unit":"Pc(s)","unit_price":"100.0000","unit_sale_price":"105.0000","item_tax":"5.0000","sold_quantity":"1.0000","subtotal":"105.0000"}],"per_page":10,"total":1}
      * @response 403 {"error":{"message":"Unauthorized action."}}
      * @response 422 {"message":"The given data was invalid.","errors":{"start_date":["The start date does not match the format Y-m-d."]}}
+     * @response 429 {"message":"Too Many Attempts."}
      */
     public function productSales(Request $request)
     {
@@ -342,6 +345,7 @@ class ReportController extends ApiController
      * @response 200 {"data":[{"total_unit_sold":"25.0000","product":"Example Product","unit":"Pc(s)","sku":"SKU-0010"}],"chart":{"labels":["Example Product - SKU-0010 (Pc(s))"],"values":[25]}}
      * @response 403 {"error":{"message":"Unauthorized action."}}
      * @response 422 {"message":"The given data was invalid.","errors":{"start_date":["The start date does not match the format Y-m-d."]}}
+     * @response 429 {"message":"Too Many Attempts."}
      */
     public function popularProducts(Request $request)
     {

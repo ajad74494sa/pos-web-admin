@@ -57,10 +57,12 @@ Route::middleware('auth:api', 'timezone')->prefix('connector/api')->group(functi
     Route::get('profit-loss-report', [Modules\Connector\Http\Controllers\Api\CommonResourceController::class, 'getProfitLoss']);
 
     Route::get('product-stock-report', [Modules\Connector\Http\Controllers\Api\CommonResourceController::class, 'getProductStock']);
-    Route::get('reports/sales', [Modules\Connector\Http\Controllers\Api\ReportController::class, 'sales']);
-    Route::get('reports/sales-payments', [Modules\Connector\Http\Controllers\Api\ReportController::class, 'salesPayments']);
-    Route::get('reports/product-sales', [Modules\Connector\Http\Controllers\Api\ReportController::class, 'productSales']);
-    Route::get('reports/popular-products', [Modules\Connector\Http\Controllers\Api\ReportController::class, 'popularProducts']);
+    Route::prefix('reports')->middleware('throttle:20,1')->group(function () {
+        Route::get('sales', [Modules\Connector\Http\Controllers\Api\ReportController::class, 'sales']);
+        Route::get('sales-payments', [Modules\Connector\Http\Controllers\Api\ReportController::class, 'salesPayments']);
+        Route::get('product-sales', [Modules\Connector\Http\Controllers\Api\ReportController::class, 'productSales']);
+        Route::get('popular-products', [Modules\Connector\Http\Controllers\Api\ReportController::class, 'popularProducts']);
+    });
     Route::get('notifications', [Modules\Connector\Http\Controllers\Api\CommonResourceController::class, 'getNotifications']);
 
     Route::get('active-subscription', [Modules\Connector\Http\Controllers\Api\SuperadminController::class, 'getActiveSubscription']);

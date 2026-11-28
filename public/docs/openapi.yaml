@@ -25808,7 +25808,7 @@ paths:
     get:
       summary: 'List finalized sales for the authenticated business.'
       operationId: listFinalizedSalesForTheAuthenticatedBusiness
-      description: ''
+      description: 'Limited to 20 requests per minute per authenticated user. Exceeding the limit returns HTTP 429 with a Retry-After header.'
       parameters:
         -
           in: query
@@ -26032,7 +26032,7 @@ paths:
     get:
       summary: 'List payments associated with sales and opening balances.'
       operationId: listPaymentsAssociatedWithSalesAndOpeningBalances
-      description: ''
+      description: 'Limited to 20 requests per minute per authenticated user. Exceeding the limit returns HTTP 429 with a Retry-After header.'
       parameters:
         -
           in: query
@@ -26236,7 +26236,7 @@ paths:
     get:
       summary: 'List product lines sold in finalized sales.'
       operationId: listProductLinesSoldInFinalizedSales
-      description: ''
+      description: 'Limited to 20 requests per minute per authenticated user. Exceeding the limit returns HTTP 429 with a Retry-After header.'
       parameters:
         -
           in: query
@@ -26497,7 +26497,7 @@ paths:
     get:
       summary: 'Rank products by units sold.'
       operationId: rankProductsByUnitsSold
-      description: ''
+      description: 'Limited to 20 requests per minute per authenticated user. Exceeding the limit returns HTTP 429 with a Retry-After header.'
       parameters:
         -
           in: query
@@ -26737,7 +26737,7 @@ tags:
     description: ''
   -
     name: 'Report management'
-    description: ''
+    description: 'Requires API authentication and report permissions. Requests are limited to 20 per minute per authenticated user; exceeding this limit returns HTTP 429 with a Retry-After header.'
   -
     name: 'Sales management'
     description: ''

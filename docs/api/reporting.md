@@ -10,6 +10,15 @@ Authorization: Bearer YOUR_ACCESS_TOKEN
 Accept: application/json
 ```
 
+## Security and rate limits
+
+Report requests require a valid API token and the endpoint's listed permission.
+Results are restricted to the authenticated user's business and permitted
+locations. Each authenticated user can make up to 20 requests per minute across
+these report endpoints. Exceeding the limit returns `429 Too Many Requests` with
+a `Retry-After` header. The general API limit of 60 requests per minute also
+applies.
+
 ## Endpoints
 
 | Report | Endpoint | Required permission |
@@ -175,3 +184,6 @@ required permission receive `403 Forbidden`:
   }
 }
 ```
+
+Requests over the report rate limit return `429 Too Many Requests` and include
+a `Retry-After` header indicating when another request can be made.
