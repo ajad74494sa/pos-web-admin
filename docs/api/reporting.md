@@ -78,20 +78,100 @@ curl --get 'https://YOUR_POS_HOST/connector/api/reports/popular-products' \
 
 ## Responses
 
-Sales, sales-payment, and product-sales endpoints return paginated JSON with
-`data`, `links`, and `meta`. Sales returns finalized invoices and includes
-customer, totals, payment status, and payment method keys. Product sales returns
-one row per top-level sale line, with returned quantities deducted from
-`sold_quantity` and `subtotal`.
+The sales, sales-payments, and product-sales endpoints return Laravel's
+paginated JSON shape. Pagination fields are at the top level; there is no
+`meta` object:
 
-Sales payments returns payment records associated with sales or opening
-balances. Parent payments allocated to sales are included once and associated
-with the first linked sale. A return payment has `is_return: 1`; callers should
-treat its amount as a return rather than a received payment.
+```json
+{
+  "current_page": 1,
+  "data": [],
+  "first_page_url": "https://YOUR_POS_HOST/connector/api/reports/sales?page=1",
+  "from": null,
+  "last_page": 1,
+  "last_page_url": "https://YOUR_POS_HOST/connector/api/reports/sales?page=1",
+  "links": [],
+  "next_page_url": null,
+  "path": "https://YOUR_POS_HOST/connector/api/reports/sales",
+  "per_page": 10,
+  "prev_page_url": null,
+  "to": null,
+  "total": 0
+}
+```
 
-Popular products returns the ranked products in `data`, plus `chart.labels` and
-`chart.values` matching the web report chart.
+### Sales
 
-Invalid filters return `422 Unprocessable Entity`. Missing or invalid tokens
-return `401 Unauthorized`; users lacking the required permission receive
-`403 Forbidden`. Validation errors use Laravel's JSON response format.
+Each `data` item represents a finalized invoice. `customer` contains `id`,
+`name`, `supplier_business_name`, and `contact_id`. `payment_methods` is an
+array of payment method keys.
+
+```json
+{
+  "id": 123,
+  "location_id": 1,
+  "customer": {
+    "id": 45,
+    "name": "Example Customer",
+    "supplier_business_name": null,
+    "contact_id": "CUST-0045"
+  },
+  "invoice_no": "INV-0123",
+  "transaction_date": "2026-10-25 10:30:00",
+  "total_before_tax": "100.0000",
+  "discount_amount": "0.0000",
+  "tax_amount": "5.0000",
+  "final_total": "105.0000",
+  "payment_status": "paid",
+  "payment_methods": ["cash"]
+}
+```
+
+### Sales payments
+
+Each `data` item includes `id`, `amount`, `is_return`, `method`, `paid_on`,
+`payment_ref_no`, `transaction_no`, `transaction_id`, `invoice_no`,
+`customer_id`, `customer_name`, and `customer_business_name`.
+Parent payments allocated to sales are included once and associated with the
+first linked sale. A return payment has `is_return: 1`; callers should treat its
+amount as a return rather than a received payment.
+
+### Product sales
+
+Each `data` item represents one top-level sale line. Returned quantities are
+deducted from `sold_quantity`; `subtotal` is the net quantity multiplied by
+`unit_sale_price`. Each item contains `id`, `transaction_id`, `invoice_no`,
+`transaction_date`, `location_id`, `customer_id`, `customer_name`, `product_id`,
+`product_name`, `sku`, `product_variation`, `variation_name`, `sub_sku`, `unit`,
+`unit_price`, `unit_sale_price`, `item_tax`, `sold_quantity`, and `subtotal`.
+
+### Popular products
+
+Popular products is not paginated. It returns ranked products in `data`, plus
+`chart.labels` and `chart.values` matching the web report chart. Product items
+contain `total_unit_sold`, `product`, `unit`, and `sku`.
+
+## Errors
+
+Invalid filters return `422 Unprocessable Entity` using Laravel's validation
+response format:
+
+```json
+{
+  "message": "The given data was invalid.",
+  "errors": {
+    "start_date": ["The start date does not match the format Y-m-d."]
+  }
+}
+```
+
+Missing or invalid tokens return `401 Unauthorized`. Users lacking the
+required permission receive `403 Forbidden`:
+
+```json
+{
+  "error": {
+    "message": "Unauthorized action."
+  }
+}
+```
