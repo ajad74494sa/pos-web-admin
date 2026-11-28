@@ -25804,6 +25804,900 @@ paths:
                   nullable: false
               required:
                 - email
+  /connector/api/reports/sales:
+    get:
+      summary: 'List finalized sales for the authenticated business.'
+      operationId: listFinalizedSalesForTheAuthenticatedBusiness
+      description: ''
+      parameters:
+        -
+          in: query
+          name: start_date
+          description: 'Inclusive transaction start date (YYYY-MM-DD).'
+          example: '2026-10-01'
+          required: false
+          schema:
+            type: string
+            description: 'Inclusive transaction start date (YYYY-MM-DD).'
+            example: '2026-10-01'
+            nullable: false
+        -
+          in: query
+          name: end_date
+          description: 'Inclusive transaction end date (YYYY-MM-DD).'
+          example: '2026-10-31'
+          required: false
+          schema:
+            type: string
+            description: 'Inclusive transaction end date (YYYY-MM-DD).'
+            example: '2026-10-31'
+            nullable: false
+        -
+          in: query
+          name: location_id
+          description: 'Filter to a permitted location.'
+          example: 1
+          required: false
+          schema:
+            type: integer
+            description: 'Filter to a permitted location.'
+            example: 1
+            nullable: false
+        -
+          in: query
+          name: customer_id
+          description: 'Filter by customer/contact ID.'
+          example: 45
+          required: false
+          schema:
+            type: integer
+            description: 'Filter by customer/contact ID.'
+            example: 45
+            nullable: false
+        -
+          in: query
+          name: payment_status
+          description: 'Filter by due, partial, paid, or overdue.'
+          example: paid
+          required: false
+          schema:
+            type: string
+            description: 'Filter by due, partial, paid, or overdue.'
+            example: paid
+            nullable: false
+        -
+          in: query
+          name: per_page
+          description: 'Page size from 1 to 100. Defaults to 10.'
+          example: 25
+          required: false
+          schema:
+            type: integer
+            description: 'Page size from 1 to 100. Defaults to 10.'
+            example: 25
+            nullable: false
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  current_page: 1
+                  data:
+                    -
+                      id: 123
+                      location_id: 1
+                      customer:
+                        id: 45
+                        name: 'Example Customer'
+                        supplier_business_name: null
+                        contact_id: CUST-0045
+                      invoice_no: INV-0123
+                      transaction_date: '2026-10-25 10:30:00'
+                      total_before_tax: '100.0000'
+                      discount_amount: '0.0000'
+                      tax_amount: '5.0000'
+                      final_total: '105.0000'
+                      payment_status: paid
+                      payment_methods:
+                        - cash
+                  per_page: 10
+                  total: 1
+                properties:
+                  current_page:
+                    type: integer
+                    example: 1
+                  data:
+                    type: array
+                    example:
+                      -
+                        id: 123
+                        location_id: 1
+                        customer:
+                          id: 45
+                          name: 'Example Customer'
+                          supplier_business_name: null
+                          contact_id: CUST-0045
+                        invoice_no: INV-0123
+                        transaction_date: '2026-10-25 10:30:00'
+                        total_before_tax: '100.0000'
+                        discount_amount: '0.0000'
+                        tax_amount: '5.0000'
+                        final_total: '105.0000'
+                        payment_status: paid
+                        payment_methods:
+                          - cash
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: integer
+                          example: 123
+                        location_id:
+                          type: integer
+                          example: 1
+                        customer:
+                          type: object
+                          properties:
+                            id:
+                              type: integer
+                              example: 45
+                            name:
+                              type: string
+                              example: 'Example Customer'
+                            supplier_business_name:
+                              type: string
+                              example: null
+                            contact_id:
+                              type: string
+                              example: CUST-0045
+                        invoice_no:
+                          type: string
+                          example: INV-0123
+                        transaction_date:
+                          type: string
+                          example: '2026-10-25 10:30:00'
+                        total_before_tax:
+                          type: string
+                          example: '100.0000'
+                        discount_amount:
+                          type: string
+                          example: '0.0000'
+                        tax_amount:
+                          type: string
+                          example: '5.0000'
+                        final_total:
+                          type: string
+                          example: '105.0000'
+                        payment_status:
+                          type: string
+                          example: paid
+                        payment_methods:
+                          type: array
+                          example:
+                            - cash
+                          items:
+                            type: string
+                  per_page:
+                    type: integer
+                    example: 10
+                  total:
+                    type: integer
+                    example: 1
+        403:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  error:
+                    message: 'Unauthorized action.'
+                properties:
+                  error:
+                    type: object
+                    properties:
+                      message:
+                        type: string
+                        example: 'Unauthorized action.'
+        422:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: 'The given data was invalid.'
+                  errors:
+                    start_date:
+                      - 'The start date does not match the format Y-m-d.'
+                properties:
+                  message:
+                    type: string
+                    example: 'The given data was invalid.'
+                  errors:
+                    type: object
+                    properties:
+                      start_date:
+                        type: array
+                        example:
+                          - 'The start date does not match the format Y-m-d.'
+                        items:
+                          type: string
+      tags:
+        - 'Report management'
+  /connector/api/reports/sales-payments:
+    get:
+      summary: 'List payments associated with sales and opening balances.'
+      operationId: listPaymentsAssociatedWithSalesAndOpeningBalances
+      description: ''
+      parameters:
+        -
+          in: query
+          name: start_date
+          description: 'Inclusive payment start date (YYYY-MM-DD).'
+          example: '2026-10-01'
+          required: false
+          schema:
+            type: string
+            description: 'Inclusive payment start date (YYYY-MM-DD).'
+            example: '2026-10-01'
+            nullable: false
+        -
+          in: query
+          name: end_date
+          description: 'Inclusive payment end date (YYYY-MM-DD).'
+          example: '2026-10-31'
+          required: false
+          schema:
+            type: string
+            description: 'Inclusive payment end date (YYYY-MM-DD).'
+            example: '2026-10-31'
+            nullable: false
+        -
+          in: query
+          name: location_id
+          description: 'Filter to a permitted location.'
+          example: 1
+          required: false
+          schema:
+            type: integer
+            description: 'Filter to a permitted location.'
+            example: 1
+            nullable: false
+        -
+          in: query
+          name: customer_id
+          description: 'Filter by customer/contact ID.'
+          example: 45
+          required: false
+          schema:
+            type: integer
+            description: 'Filter by customer/contact ID.'
+            example: 45
+            nullable: false
+        -
+          in: query
+          name: payment_method
+          description: 'Filter by payment method key.'
+          example: cash
+          required: false
+          schema:
+            type: string
+            description: 'Filter by payment method key.'
+            example: cash
+            nullable: false
+        -
+          in: query
+          name: per_page
+          description: 'Page size from 1 to 100. Defaults to 10.'
+          example: 25
+          required: false
+          schema:
+            type: integer
+            description: 'Page size from 1 to 100. Defaults to 10.'
+            example: 25
+            nullable: false
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  current_page: 1
+                  data:
+                    -
+                      id: 567
+                      amount: '105.0000'
+                      is_return: 0
+                      method: cash
+                      paid_on: '2026-10-25 10:30:00'
+                      payment_ref_no: null
+                      transaction_no: null
+                      transaction_id: 123
+                      invoice_no: INV-0123
+                      customer_id: 45
+                      customer_name: 'Example Customer'
+                      customer_business_name: null
+                  per_page: 10
+                  total: 1
+                properties:
+                  current_page:
+                    type: integer
+                    example: 1
+                  data:
+                    type: array
+                    example:
+                      -
+                        id: 567
+                        amount: '105.0000'
+                        is_return: 0
+                        method: cash
+                        paid_on: '2026-10-25 10:30:00'
+                        payment_ref_no: null
+                        transaction_no: null
+                        transaction_id: 123
+                        invoice_no: INV-0123
+                        customer_id: 45
+                        customer_name: 'Example Customer'
+                        customer_business_name: null
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: integer
+                          example: 567
+                        amount:
+                          type: string
+                          example: '105.0000'
+                        is_return:
+                          type: integer
+                          example: 0
+                        method:
+                          type: string
+                          example: cash
+                        paid_on:
+                          type: string
+                          example: '2026-10-25 10:30:00'
+                        payment_ref_no:
+                          type: string
+                          example: null
+                        transaction_no:
+                          type: string
+                          example: null
+                        transaction_id:
+                          type: integer
+                          example: 123
+                        invoice_no:
+                          type: string
+                          example: INV-0123
+                        customer_id:
+                          type: integer
+                          example: 45
+                        customer_name:
+                          type: string
+                          example: 'Example Customer'
+                        customer_business_name:
+                          type: string
+                          example: null
+                  per_page:
+                    type: integer
+                    example: 10
+                  total:
+                    type: integer
+                    example: 1
+        403:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  error:
+                    message: 'Unauthorized action.'
+                properties:
+                  error:
+                    type: object
+                    properties:
+                      message:
+                        type: string
+                        example: 'Unauthorized action.'
+        422:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: 'The given data was invalid.'
+                  errors:
+                    start_date:
+                      - 'The start date does not match the format Y-m-d.'
+                properties:
+                  message:
+                    type: string
+                    example: 'The given data was invalid.'
+                  errors:
+                    type: object
+                    properties:
+                      start_date:
+                        type: array
+                        example:
+                          - 'The start date does not match the format Y-m-d.'
+                        items:
+                          type: string
+      tags:
+        - 'Report management'
+  /connector/api/reports/product-sales:
+    get:
+      summary: 'List product lines sold in finalized sales.'
+      operationId: listProductLinesSoldInFinalizedSales
+      description: ''
+      parameters:
+        -
+          in: query
+          name: start_date
+          description: 'Inclusive transaction start date (YYYY-MM-DD).'
+          example: '2026-10-01'
+          required: false
+          schema:
+            type: string
+            description: 'Inclusive transaction start date (YYYY-MM-DD).'
+            example: '2026-10-01'
+            nullable: false
+        -
+          in: query
+          name: end_date
+          description: 'Inclusive transaction end date (YYYY-MM-DD).'
+          example: '2026-10-31'
+          required: false
+          schema:
+            type: string
+            description: 'Inclusive transaction end date (YYYY-MM-DD).'
+            example: '2026-10-31'
+            nullable: false
+        -
+          in: query
+          name: location_id
+          description: 'Filter to a permitted location.'
+          example: 1
+          required: false
+          schema:
+            type: integer
+            description: 'Filter to a permitted location.'
+            example: 1
+            nullable: false
+        -
+          in: query
+          name: customer_id
+          description: 'Filter by customer/contact ID.'
+          example: 45
+          required: false
+          schema:
+            type: integer
+            description: 'Filter by customer/contact ID.'
+            example: 45
+            nullable: false
+        -
+          in: query
+          name: category_id
+          description: 'Filter by product category.'
+          example: 4
+          required: false
+          schema:
+            type: integer
+            description: 'Filter by product category.'
+            example: 4
+            nullable: false
+        -
+          in: query
+          name: brand_id
+          description: 'Filter by product brand.'
+          example: 3
+          required: false
+          schema:
+            type: integer
+            description: 'Filter by product brand.'
+            example: 3
+            nullable: false
+        -
+          in: query
+          name: variation_id
+          description: 'Filter by product variation.'
+          example: 18
+          required: false
+          schema:
+            type: integer
+            description: 'Filter by product variation.'
+            example: 18
+            nullable: false
+        -
+          in: query
+          name: per_page
+          description: 'Page size from 1 to 100. Defaults to 10.'
+          example: 25
+          required: false
+          schema:
+            type: integer
+            description: 'Page size from 1 to 100. Defaults to 10.'
+            example: 25
+            nullable: false
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  current_page: 1
+                  data:
+                    -
+                      id: 789
+                      transaction_id: 123
+                      invoice_no: INV-0123
+                      transaction_date: '2026-10-25 10:30:00'
+                      location_id: 1
+                      customer_id: 45
+                      customer_name: 'Example Customer'
+                      product_id: 10
+                      product_name: 'Example Product'
+                      sku: SKU-0010
+                      product_variation: Size
+                      variation_name: Large
+                      sub_sku: SKU-0010-L
+                      unit: Pc(s)
+                      unit_price: '100.0000'
+                      unit_sale_price: '105.0000'
+                      item_tax: '5.0000'
+                      sold_quantity: '1.0000'
+                      subtotal: '105.0000'
+                  per_page: 10
+                  total: 1
+                properties:
+                  current_page:
+                    type: integer
+                    example: 1
+                  data:
+                    type: array
+                    example:
+                      -
+                        id: 789
+                        transaction_id: 123
+                        invoice_no: INV-0123
+                        transaction_date: '2026-10-25 10:30:00'
+                        location_id: 1
+                        customer_id: 45
+                        customer_name: 'Example Customer'
+                        product_id: 10
+                        product_name: 'Example Product'
+                        sku: SKU-0010
+                        product_variation: Size
+                        variation_name: Large
+                        sub_sku: SKU-0010-L
+                        unit: Pc(s)
+                        unit_price: '100.0000'
+                        unit_sale_price: '105.0000'
+                        item_tax: '5.0000'
+                        sold_quantity: '1.0000'
+                        subtotal: '105.0000'
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: integer
+                          example: 789
+                        transaction_id:
+                          type: integer
+                          example: 123
+                        invoice_no:
+                          type: string
+                          example: INV-0123
+                        transaction_date:
+                          type: string
+                          example: '2026-10-25 10:30:00'
+                        location_id:
+                          type: integer
+                          example: 1
+                        customer_id:
+                          type: integer
+                          example: 45
+                        customer_name:
+                          type: string
+                          example: 'Example Customer'
+                        product_id:
+                          type: integer
+                          example: 10
+                        product_name:
+                          type: string
+                          example: 'Example Product'
+                        sku:
+                          type: string
+                          example: SKU-0010
+                        product_variation:
+                          type: string
+                          example: Size
+                        variation_name:
+                          type: string
+                          example: Large
+                        sub_sku:
+                          type: string
+                          example: SKU-0010-L
+                        unit:
+                          type: string
+                          example: Pc(s)
+                        unit_price:
+                          type: string
+                          example: '100.0000'
+                        unit_sale_price:
+                          type: string
+                          example: '105.0000'
+                        item_tax:
+                          type: string
+                          example: '5.0000'
+                        sold_quantity:
+                          type: string
+                          example: '1.0000'
+                        subtotal:
+                          type: string
+                          example: '105.0000'
+                  per_page:
+                    type: integer
+                    example: 10
+                  total:
+                    type: integer
+                    example: 1
+        403:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  error:
+                    message: 'Unauthorized action.'
+                properties:
+                  error:
+                    type: object
+                    properties:
+                      message:
+                        type: string
+                        example: 'Unauthorized action.'
+        422:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: 'The given data was invalid.'
+                  errors:
+                    start_date:
+                      - 'The start date does not match the format Y-m-d.'
+                properties:
+                  message:
+                    type: string
+                    example: 'The given data was invalid.'
+                  errors:
+                    type: object
+                    properties:
+                      start_date:
+                        type: array
+                        example:
+                          - 'The start date does not match the format Y-m-d.'
+                        items:
+                          type: string
+      tags:
+        - 'Report management'
+  /connector/api/reports/popular-products:
+    get:
+      summary: 'Rank products by units sold.'
+      operationId: rankProductsByUnitsSold
+      description: ''
+      parameters:
+        -
+          in: query
+          name: start_date
+          description: 'Inclusive sale start date (YYYY-MM-DD).'
+          example: '2026-10-01'
+          required: false
+          schema:
+            type: string
+            description: 'Inclusive sale start date (YYYY-MM-DD).'
+            example: '2026-10-01'
+            nullable: false
+        -
+          in: query
+          name: end_date
+          description: 'Inclusive sale end date (YYYY-MM-DD).'
+          example: '2026-10-31'
+          required: false
+          schema:
+            type: string
+            description: 'Inclusive sale end date (YYYY-MM-DD).'
+            example: '2026-10-31'
+            nullable: false
+        -
+          in: query
+          name: location_id
+          description: 'Filter to a permitted location.'
+          example: 1
+          required: false
+          schema:
+            type: integer
+            description: 'Filter to a permitted location.'
+            example: 1
+            nullable: false
+        -
+          in: query
+          name: category_id
+          description: 'Filter by product category.'
+          example: 4
+          required: false
+          schema:
+            type: integer
+            description: 'Filter by product category.'
+            example: 4
+            nullable: false
+        -
+          in: query
+          name: sub_category_id
+          description: 'Filter by product subcategory.'
+          example: 5
+          required: false
+          schema:
+            type: integer
+            description: 'Filter by product subcategory.'
+            example: 5
+            nullable: false
+        -
+          in: query
+          name: brand_id
+          description: 'Filter by product brand.'
+          example: 3
+          required: false
+          schema:
+            type: integer
+            description: 'Filter by product brand.'
+            example: 3
+            nullable: false
+        -
+          in: query
+          name: unit_id
+          description: 'Filter by product unit.'
+          example: 2
+          required: false
+          schema:
+            type: integer
+            description: 'Filter by product unit.'
+            example: 2
+            nullable: false
+        -
+          in: query
+          name: product_type
+          description: 'Filter by single, variable, or combo.'
+          example: single
+          required: false
+          schema:
+            type: string
+            description: 'Filter by single, variable, or combo.'
+            example: single
+            nullable: false
+        -
+          in: query
+          name: limit
+          description: 'Number of ranked products from 1 to 100. Defaults to 5.'
+          example: 10
+          required: false
+          schema:
+            type: integer
+            description: 'Number of ranked products from 1 to 100. Defaults to 5.'
+            example: 10
+            nullable: false
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  data:
+                    -
+                      total_unit_sold: '25.0000'
+                      product: 'Example Product'
+                      unit: Pc(s)
+                      sku: SKU-0010
+                  chart:
+                    labels:
+                      - 'Example Product - SKU-0010 (Pc(s))'
+                    values:
+                      - 25
+                properties:
+                  data:
+                    type: array
+                    example:
+                      -
+                        total_unit_sold: '25.0000'
+                        product: 'Example Product'
+                        unit: Pc(s)
+                        sku: SKU-0010
+                    items:
+                      type: object
+                      properties:
+                        total_unit_sold:
+                          type: string
+                          example: '25.0000'
+                        product:
+                          type: string
+                          example: 'Example Product'
+                        unit:
+                          type: string
+                          example: Pc(s)
+                        sku:
+                          type: string
+                          example: SKU-0010
+                  chart:
+                    type: object
+                    properties:
+                      labels:
+                        type: array
+                        example:
+                          - 'Example Product - SKU-0010 (Pc(s))'
+                        items:
+                          type: string
+                      values:
+                        type: array
+                        example:
+                          - 25
+                        items:
+                          type: integer
+        403:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  error:
+                    message: 'Unauthorized action.'
+                properties:
+                  error:
+                    type: object
+                    properties:
+                      message:
+                        type: string
+                        example: 'Unauthorized action.'
+        422:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: 'The given data was invalid.'
+                  errors:
+                    start_date:
+                      - 'The start date does not match the format Y-m-d.'
+                properties:
+                  message:
+                    type: string
+                    example: 'The given data was invalid.'
+                  errors:
+                    type: object
+                    properties:
+                      start_date:
+                        type: array
+                        example:
+                          - 'The start date does not match the format Y-m-d.'
+                        items:
+                          type: string
+      tags:
+        - 'Report management'
 tags:
   -
     name: 'Attendance management'
@@ -25840,6 +26734,9 @@ tags:
     description: ''
   -
     name: 'Purchase management'
+    description: ''
+  -
+    name: 'Report management'
     description: ''
   -
     name: 'Sales management'

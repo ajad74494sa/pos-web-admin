@@ -4597,6 +4597,366 @@
             ]
         },
         {
+            "name": "Report management",
+            "description": "",
+            "item": [
+                {
+                    "name": "List finalized sales for the authenticated business.",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "connector\/api\/reports\/sales",
+                            "query": [
+                                {
+                                    "key": "start_date",
+                                    "value": "2026-10-01",
+                                    "description": "Inclusive transaction start date (YYYY-MM-DD).",
+                                    "disabled": false
+                                },
+                                {
+                                    "key": "end_date",
+                                    "value": "2026-10-31",
+                                    "description": "Inclusive transaction end date (YYYY-MM-DD).",
+                                    "disabled": false
+                                },
+                                {
+                                    "key": "location_id",
+                                    "value": "1",
+                                    "description": "Filter to a permitted location.",
+                                    "disabled": false
+                                },
+                                {
+                                    "key": "customer_id",
+                                    "value": "45",
+                                    "description": "Filter by customer\/contact ID.",
+                                    "disabled": false
+                                },
+                                {
+                                    "key": "payment_status",
+                                    "value": "paid",
+                                    "description": "Filter by due, partial, paid, or overdue.",
+                                    "disabled": false
+                                },
+                                {
+                                    "key": "per_page",
+                                    "value": "25",
+                                    "description": "Page size from 1 to 100. Defaults to 10.",
+                                    "disabled": false
+                                }
+                            ],
+                            "raw": "{{baseUrl}}\/connector\/api\/reports\/sales?start_date=2026-10-01&end_date=2026-10-31&location_id=1&customer_id=45&payment_status=paid&per_page=25"
+                        },
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": null,
+                        "description": ""
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 200,
+                            "body": "{\"current_page\":1,\"data\":[{\"id\":123,\"location_id\":1,\"customer\":{\"id\":45,\"name\":\"Example Customer\",\"supplier_business_name\":null,\"contact_id\":\"CUST-0045\"},\"invoice_no\":\"INV-0123\",\"transaction_date\":\"2026-10-25 10:30:00\",\"total_before_tax\":\"100.0000\",\"discount_amount\":\"0.0000\",\"tax_amount\":\"5.0000\",\"final_total\":\"105.0000\",\"payment_status\":\"paid\",\"payment_methods\":[\"cash\"]}],\"per_page\":10,\"total\":1}",
+                            "name": ""
+                        },
+                        {
+                            "header": [],
+                            "code": 403,
+                            "body": "{\"error\":{\"message\":\"Unauthorized action.\"}}",
+                            "name": ""
+                        },
+                        {
+                            "header": [],
+                            "code": 422,
+                            "body": "{\"message\":\"The given data was invalid.\",\"errors\":{\"start_date\":[\"The start date does not match the format Y-m-d.\"]}}",
+                            "name": ""
+                        }
+                    ]
+                },
+                {
+                    "name": "List payments associated with sales and opening balances.",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "connector\/api\/reports\/sales-payments",
+                            "query": [
+                                {
+                                    "key": "start_date",
+                                    "value": "2026-10-01",
+                                    "description": "Inclusive payment start date (YYYY-MM-DD).",
+                                    "disabled": false
+                                },
+                                {
+                                    "key": "end_date",
+                                    "value": "2026-10-31",
+                                    "description": "Inclusive payment end date (YYYY-MM-DD).",
+                                    "disabled": false
+                                },
+                                {
+                                    "key": "location_id",
+                                    "value": "1",
+                                    "description": "Filter to a permitted location.",
+                                    "disabled": false
+                                },
+                                {
+                                    "key": "customer_id",
+                                    "value": "45",
+                                    "description": "Filter by customer\/contact ID.",
+                                    "disabled": false
+                                },
+                                {
+                                    "key": "payment_method",
+                                    "value": "cash",
+                                    "description": "Filter by payment method key.",
+                                    "disabled": false
+                                },
+                                {
+                                    "key": "per_page",
+                                    "value": "25",
+                                    "description": "Page size from 1 to 100. Defaults to 10.",
+                                    "disabled": false
+                                }
+                            ],
+                            "raw": "{{baseUrl}}\/connector\/api\/reports\/sales-payments?start_date=2026-10-01&end_date=2026-10-31&location_id=1&customer_id=45&payment_method=cash&per_page=25"
+                        },
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": null,
+                        "description": ""
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 200,
+                            "body": "{\"current_page\":1,\"data\":[{\"id\":567,\"amount\":\"105.0000\",\"is_return\":0,\"method\":\"cash\",\"paid_on\":\"2026-10-25 10:30:00\",\"payment_ref_no\":null,\"transaction_no\":null,\"transaction_id\":123,\"invoice_no\":\"INV-0123\",\"customer_id\":45,\"customer_name\":\"Example Customer\",\"customer_business_name\":null}],\"per_page\":10,\"total\":1}",
+                            "name": ""
+                        },
+                        {
+                            "header": [],
+                            "code": 403,
+                            "body": "{\"error\":{\"message\":\"Unauthorized action.\"}}",
+                            "name": ""
+                        },
+                        {
+                            "header": [],
+                            "code": 422,
+                            "body": "{\"message\":\"The given data was invalid.\",\"errors\":{\"start_date\":[\"The start date does not match the format Y-m-d.\"]}}",
+                            "name": ""
+                        }
+                    ]
+                },
+                {
+                    "name": "List product lines sold in finalized sales.",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "connector\/api\/reports\/product-sales",
+                            "query": [
+                                {
+                                    "key": "start_date",
+                                    "value": "2026-10-01",
+                                    "description": "Inclusive transaction start date (YYYY-MM-DD).",
+                                    "disabled": false
+                                },
+                                {
+                                    "key": "end_date",
+                                    "value": "2026-10-31",
+                                    "description": "Inclusive transaction end date (YYYY-MM-DD).",
+                                    "disabled": false
+                                },
+                                {
+                                    "key": "location_id",
+                                    "value": "1",
+                                    "description": "Filter to a permitted location.",
+                                    "disabled": false
+                                },
+                                {
+                                    "key": "customer_id",
+                                    "value": "45",
+                                    "description": "Filter by customer\/contact ID.",
+                                    "disabled": false
+                                },
+                                {
+                                    "key": "category_id",
+                                    "value": "4",
+                                    "description": "Filter by product category.",
+                                    "disabled": false
+                                },
+                                {
+                                    "key": "brand_id",
+                                    "value": "3",
+                                    "description": "Filter by product brand.",
+                                    "disabled": false
+                                },
+                                {
+                                    "key": "variation_id",
+                                    "value": "18",
+                                    "description": "Filter by product variation.",
+                                    "disabled": false
+                                },
+                                {
+                                    "key": "per_page",
+                                    "value": "25",
+                                    "description": "Page size from 1 to 100. Defaults to 10.",
+                                    "disabled": false
+                                }
+                            ],
+                            "raw": "{{baseUrl}}\/connector\/api\/reports\/product-sales?start_date=2026-10-01&end_date=2026-10-31&location_id=1&customer_id=45&category_id=4&brand_id=3&variation_id=18&per_page=25"
+                        },
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": null,
+                        "description": ""
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 200,
+                            "body": "{\"current_page\":1,\"data\":[{\"id\":789,\"transaction_id\":123,\"invoice_no\":\"INV-0123\",\"transaction_date\":\"2026-10-25 10:30:00\",\"location_id\":1,\"customer_id\":45,\"customer_name\":\"Example Customer\",\"product_id\":10,\"product_name\":\"Example Product\",\"sku\":\"SKU-0010\",\"product_variation\":\"Size\",\"variation_name\":\"Large\",\"sub_sku\":\"SKU-0010-L\",\"unit\":\"Pc(s)\",\"unit_price\":\"100.0000\",\"unit_sale_price\":\"105.0000\",\"item_tax\":\"5.0000\",\"sold_quantity\":\"1.0000\",\"subtotal\":\"105.0000\"}],\"per_page\":10,\"total\":1}",
+                            "name": ""
+                        },
+                        {
+                            "header": [],
+                            "code": 403,
+                            "body": "{\"error\":{\"message\":\"Unauthorized action.\"}}",
+                            "name": ""
+                        },
+                        {
+                            "header": [],
+                            "code": 422,
+                            "body": "{\"message\":\"The given data was invalid.\",\"errors\":{\"start_date\":[\"The start date does not match the format Y-m-d.\"]}}",
+                            "name": ""
+                        }
+                    ]
+                },
+                {
+                    "name": "Rank products by units sold.",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "connector\/api\/reports\/popular-products",
+                            "query": [
+                                {
+                                    "key": "start_date",
+                                    "value": "2026-10-01",
+                                    "description": "Inclusive sale start date (YYYY-MM-DD).",
+                                    "disabled": false
+                                },
+                                {
+                                    "key": "end_date",
+                                    "value": "2026-10-31",
+                                    "description": "Inclusive sale end date (YYYY-MM-DD).",
+                                    "disabled": false
+                                },
+                                {
+                                    "key": "location_id",
+                                    "value": "1",
+                                    "description": "Filter to a permitted location.",
+                                    "disabled": false
+                                },
+                                {
+                                    "key": "category_id",
+                                    "value": "4",
+                                    "description": "Filter by product category.",
+                                    "disabled": false
+                                },
+                                {
+                                    "key": "sub_category_id",
+                                    "value": "5",
+                                    "description": "Filter by product subcategory.",
+                                    "disabled": false
+                                },
+                                {
+                                    "key": "brand_id",
+                                    "value": "3",
+                                    "description": "Filter by product brand.",
+                                    "disabled": false
+                                },
+                                {
+                                    "key": "unit_id",
+                                    "value": "2",
+                                    "description": "Filter by product unit.",
+                                    "disabled": false
+                                },
+                                {
+                                    "key": "product_type",
+                                    "value": "single",
+                                    "description": "Filter by single, variable, or combo.",
+                                    "disabled": false
+                                },
+                                {
+                                    "key": "limit",
+                                    "value": "10",
+                                    "description": "Number of ranked products from 1 to 100. Defaults to 5.",
+                                    "disabled": false
+                                }
+                            ],
+                            "raw": "{{baseUrl}}\/connector\/api\/reports\/popular-products?start_date=2026-10-01&end_date=2026-10-31&location_id=1&category_id=4&sub_category_id=5&brand_id=3&unit_id=2&product_type=single&limit=10"
+                        },
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": null,
+                        "description": ""
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 200,
+                            "body": "{\"data\":[{\"total_unit_sold\":\"25.0000\",\"product\":\"Example Product\",\"unit\":\"Pc(s)\",\"sku\":\"SKU-0010\"}],\"chart\":{\"labels\":[\"Example Product - SKU-0010 (Pc(s))\"],\"values\":[25]}}",
+                            "name": ""
+                        },
+                        {
+                            "header": [],
+                            "code": 403,
+                            "body": "{\"error\":{\"message\":\"Unauthorized action.\"}}",
+                            "name": ""
+                        },
+                        {
+                            "header": [],
+                            "code": 422,
+                            "body": "{\"message\":\"The given data was invalid.\",\"errors\":{\"start_date\":[\"The start date does not match the format Y-m-d.\"]}}",
+                            "name": ""
+                        }
+                    ]
+                }
+            ]
+        },
+        {
             "name": "Sales management",
             "description": "",
             "item": [

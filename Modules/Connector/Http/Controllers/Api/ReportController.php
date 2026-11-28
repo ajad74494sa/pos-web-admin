@@ -10,8 +10,15 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
 
+/**
+ * @group Report management
+ * @authenticated
+ *
+ * Report APIs for sales, payments, product sales, and popular products.
+ */
 class ReportController extends ApiController
 {
     protected $productUtil;
@@ -21,9 +28,22 @@ class ReportController extends ApiController
         $this->productUtil = $productUtil;
     }
 
+    /**
+     * List finalized sales for the authenticated business.
+     *
+     * @queryParam start_date string Inclusive transaction start date (YYYY-MM-DD). Example: 2026-10-01
+     * @queryParam end_date string Inclusive transaction end date (YYYY-MM-DD). Example: 2026-10-31
+     * @queryParam location_id integer Filter to a permitted location. Example: 1
+     * @queryParam customer_id integer Filter by customer/contact ID. Example: 45
+     * @queryParam payment_status string Filter by due, partial, paid, or overdue. Example: paid
+     * @queryParam per_page integer Page size from 1 to 100. Defaults to 10. Example: 25
+     * @response 200 {"current_page":1,"data":[{"id":123,"location_id":1,"customer":{"id":45,"name":"Example Customer","supplier_business_name":null,"contact_id":"CUST-0045"},"invoice_no":"INV-0123","transaction_date":"2026-10-25 10:30:00","total_before_tax":"100.0000","discount_amount":"0.0000","tax_amount":"5.0000","final_total":"105.0000","payment_status":"paid","payment_methods":["cash"]}],"per_page":10,"total":1}
+     * @response 403 {"error":{"message":"Unauthorized action."}}
+     * @response 422 {"message":"The given data was invalid.","errors":{"start_date":["The start date does not match the format Y-m-d."]}}
+     */
     public function sales(Request $request)
     {
-        $filters = $request->validate([
+        $filters = $this->validateQuery($request, [
             'start_date' => 'nullable|date_format:Y-m-d',
             'end_date' => 'nullable|date_format:Y-m-d',
             'location_id' => 'nullable|integer|min:1',
@@ -96,9 +116,22 @@ class ReportController extends ApiController
         return $sales;
     }
 
+    /**
+     * List payments associated with sales and opening balances.
+     *
+     * @queryParam start_date string Inclusive payment start date (YYYY-MM-DD). Example: 2026-10-01
+     * @queryParam end_date string Inclusive payment end date (YYYY-MM-DD). Example: 2026-10-31
+     * @queryParam location_id integer Filter to a permitted location. Example: 1
+     * @queryParam customer_id integer Filter by customer/contact ID. Example: 45
+     * @queryParam payment_method string Filter by payment method key. Example: cash
+     * @queryParam per_page integer Page size from 1 to 100. Defaults to 10. Example: 25
+     * @response 200 {"current_page":1,"data":[{"id":567,"amount":"105.0000","is_return":0,"method":"cash","paid_on":"2026-10-25 10:30:00","payment_ref_no":null,"transaction_no":null,"transaction_id":123,"invoice_no":"INV-0123","customer_id":45,"customer_name":"Example Customer","customer_business_name":null}],"per_page":10,"total":1}
+     * @response 403 {"error":{"message":"Unauthorized action."}}
+     * @response 422 {"message":"The given data was invalid.","errors":{"start_date":["The start date does not match the format Y-m-d."]}}
+     */
     public function salesPayments(Request $request)
     {
-        $filters = $request->validate([
+        $filters = $this->validateQuery($request, [
             'start_date' => 'nullable|date_format:Y-m-d',
             'end_date' => 'nullable|date_format:Y-m-d',
             'location_id' => 'nullable|integer|min:1',
@@ -207,9 +240,24 @@ class ReportController extends ApiController
             ->paginate($filters['per_page'] ?? $this->perPage);
     }
 
+    /**
+     * List product lines sold in finalized sales.
+     *
+     * @queryParam start_date string Inclusive transaction start date (YYYY-MM-DD). Example: 2026-10-01
+     * @queryParam end_date string Inclusive transaction end date (YYYY-MM-DD). Example: 2026-10-31
+     * @queryParam location_id integer Filter to a permitted location. Example: 1
+     * @queryParam customer_id integer Filter by customer/contact ID. Example: 45
+     * @queryParam category_id integer Filter by product category. Example: 4
+     * @queryParam brand_id integer Filter by product brand. Example: 3
+     * @queryParam variation_id integer Filter by product variation. Example: 18
+     * @queryParam per_page integer Page size from 1 to 100. Defaults to 10. Example: 25
+     * @response 200 {"current_page":1,"data":[{"id":789,"transaction_id":123,"invoice_no":"INV-0123","transaction_date":"2026-10-25 10:30:00","location_id":1,"customer_id":45,"customer_name":"Example Customer","product_id":10,"product_name":"Example Product","sku":"SKU-0010","product_variation":"Size","variation_name":"Large","sub_sku":"SKU-0010-L","unit":"Pc(s)","unit_price":"100.0000","unit_sale_price":"105.0000","item_tax":"5.0000","sold_quantity":"1.0000","subtotal":"105.0000"}],"per_page":10,"total":1}
+     * @response 403 {"error":{"message":"Unauthorized action."}}
+     * @response 422 {"message":"The given data was invalid.","errors":{"start_date":["The start date does not match the format Y-m-d."]}}
+     */
     public function productSales(Request $request)
     {
-        $filters = $request->validate([
+        $filters = $this->validateQuery($request, [
             'start_date' => 'nullable|date_format:Y-m-d',
             'end_date' => 'nullable|date_format:Y-m-d',
             'location_id' => 'nullable|integer|min:1',
@@ -279,9 +327,25 @@ class ReportController extends ApiController
             ->paginate($filters['per_page'] ?? $this->perPage);
     }
 
+    /**
+     * Rank products by units sold.
+     *
+     * @queryParam start_date string Inclusive sale start date (YYYY-MM-DD). Example: 2026-10-01
+     * @queryParam end_date string Inclusive sale end date (YYYY-MM-DD). Example: 2026-10-31
+     * @queryParam location_id integer Filter to a permitted location. Example: 1
+     * @queryParam category_id integer Filter by product category. Example: 4
+     * @queryParam sub_category_id integer Filter by product subcategory. Example: 5
+     * @queryParam brand_id integer Filter by product brand. Example: 3
+     * @queryParam unit_id integer Filter by product unit. Example: 2
+     * @queryParam product_type string Filter by single, variable, or combo. Example: single
+     * @queryParam limit integer Number of ranked products from 1 to 100. Defaults to 5. Example: 10
+     * @response 200 {"data":[{"total_unit_sold":"25.0000","product":"Example Product","unit":"Pc(s)","sku":"SKU-0010"}],"chart":{"labels":["Example Product - SKU-0010 (Pc(s))"],"values":[25]}}
+     * @response 403 {"error":{"message":"Unauthorized action."}}
+     * @response 422 {"message":"The given data was invalid.","errors":{"start_date":["The start date does not match the format Y-m-d."]}}
+     */
     public function popularProducts(Request $request)
     {
-        $filters = $request->validate([
+        $filters = $this->validateQuery($request, [
             'start_date' => 'nullable|date_format:Y-m-d',
             'end_date' => 'nullable|date_format:Y-m-d',
             'location_id' => 'nullable|integer|min:1',
@@ -334,6 +398,11 @@ class ReportController extends ApiController
         if (! empty($locationId)) {
             $query->where($column, $locationId);
         }
+    }
+
+    private function validateQuery(Request $request, array $rules)
+    {
+        return Validator::make($request->query(), $rules)->validate();
     }
 
     private function applyDateFilters(Builder $query, array $filters, $column)

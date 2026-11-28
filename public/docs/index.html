@@ -385,6 +385,25 @@ product before editing. Product type cannot be changed through this API.</a>
                             </li>
                                                                         </ul>
                             </ul>
+                    <ul id="tocify-header-report-management" class="tocify-header">
+                <li class="tocify-item level-1" data-unique="report-management">
+                    <a href="#report-management">Report management</a>
+                </li>
+                                    <ul id="tocify-subheader-report-management" class="tocify-subheader">
+                                                    <li class="tocify-item level-2" data-unique="report-management-GETconnector-api-reports-sales">
+                                <a href="#report-management-GETconnector-api-reports-sales">List finalized sales for the authenticated business.</a>
+                            </li>
+                                                                                <li class="tocify-item level-2" data-unique="report-management-GETconnector-api-reports-sales-payments">
+                                <a href="#report-management-GETconnector-api-reports-sales-payments">List payments associated with sales and opening balances.</a>
+                            </li>
+                                                                                <li class="tocify-item level-2" data-unique="report-management-GETconnector-api-reports-product-sales">
+                                <a href="#report-management-GETconnector-api-reports-product-sales">List product lines sold in finalized sales.</a>
+                            </li>
+                                                                                <li class="tocify-item level-2" data-unique="report-management-GETconnector-api-reports-popular-products">
+                                <a href="#report-management-GETconnector-api-reports-popular-products">Rank products by units sold.</a>
+                            </li>
+                                                                        </ul>
+                            </ul>
                     <ul id="tocify-header-sales-management" class="tocify-header">
                 <li class="tocify-item level-1" data-unique="sales-management">
                     <a href="#sales-management">Sales management</a>
@@ -528,7 +547,7 @@ product before editing. Product type cannot be changed through this API.</a>
     </ul>
 
     <ul class="toc-footer" id="last-updated">
-        <li>Last updated: November 19, 2026</li>
+        <li>Last updated: November 28, 2026</li>
     </ul>
 </div>
 
@@ -21913,7 +21932,1126 @@ You can check the Dev Tools console for debugging information.</code></pre>
         </div>
         </form>
 
-                <h1 id="sales-management">Sales management</h1>
+                <h1 id="report-management">Report management</h1>
+
+
+
+                                <h2 id="report-management-GETconnector-api-reports-sales">List finalized sales for the authenticated business.</h2>
+
+<p>
+<small class="badge badge-darkred">requires authentication</small>
+</p>
+
+
+
+<span id="example-requests-GETconnector-api-reports-sales">
+<blockquote>Example request:</blockquote>
+
+
+<div class="bash-example">
+    <pre><code class="language-bash">curl --request GET \
+    --get "https://pos.kheyalcafe.com/connector/api/reports/sales?start_date=2026-10-01&amp;end_date=2026-10-31&amp;location_id=1&amp;customer_id=45&amp;payment_status=paid&amp;per_page=25" \
+    --header "Authorization: Bearer {access_token}" \
+    --header "Content-Type: application/json" \
+    --header "Accept: application/json"</code></pre></div>
+
+
+<div class="javascript-example">
+    <pre><code class="language-javascript">const url = new URL(
+    "https://pos.kheyalcafe.com/connector/api/reports/sales"
+);
+
+const params = {
+    "start_date": "2026-10-01",
+    "end_date": "2026-10-31",
+    "location_id": "1",
+    "customer_id": "45",
+    "payment_status": "paid",
+    "per_page": "25",
+};
+Object.keys(params)
+    .forEach(key =&gt; url.searchParams.append(key, params[key]));
+
+const headers = {
+    "Authorization": "Bearer {access_token}",
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+fetch(url, {
+    method: "GET",
+    headers,
+}).then(response =&gt; response.json());</code></pre></div>
+
+
+<div class="php-example">
+    <pre><code class="language-php">$client = new \GuzzleHttp\Client();
+$url = 'https://pos.kheyalcafe.com/connector/api/reports/sales';
+$response = $client-&gt;get(
+    $url,
+    [
+        'headers' =&gt; [
+            'Authorization' =&gt; 'Bearer {access_token}',
+            'Content-Type' =&gt; 'application/json',
+            'Accept' =&gt; 'application/json',
+        ],
+        'query' =&gt; [
+            'start_date' =&gt; '2026-10-01',
+            'end_date' =&gt; '2026-10-31',
+            'location_id' =&gt; '1',
+            'customer_id' =&gt; '45',
+            'payment_status' =&gt; 'paid',
+            'per_page' =&gt; '25',
+        ],
+    ]
+);
+$body = $response-&gt;getBody();
+print_r(json_decode((string) $body));</code></pre></div>
+
+</span>
+
+<span id="example-responses-GETconnector-api-reports-sales">
+            <blockquote>
+            <p>Example response (200):</p>
+        </blockquote>
+                <pre>
+
+<code class="language-json" style="max-height: 300px;">{
+    &quot;current_page&quot;: 1,
+    &quot;data&quot;: [
+        {
+            &quot;id&quot;: 123,
+            &quot;location_id&quot;: 1,
+            &quot;customer&quot;: {
+                &quot;id&quot;: 45,
+                &quot;name&quot;: &quot;Example Customer&quot;,
+                &quot;supplier_business_name&quot;: null,
+                &quot;contact_id&quot;: &quot;CUST-0045&quot;
+            },
+            &quot;invoice_no&quot;: &quot;INV-0123&quot;,
+            &quot;transaction_date&quot;: &quot;2026-10-25 10:30:00&quot;,
+            &quot;total_before_tax&quot;: &quot;100.0000&quot;,
+            &quot;discount_amount&quot;: &quot;0.0000&quot;,
+            &quot;tax_amount&quot;: &quot;5.0000&quot;,
+            &quot;final_total&quot;: &quot;105.0000&quot;,
+            &quot;payment_status&quot;: &quot;paid&quot;,
+            &quot;payment_methods&quot;: [
+                &quot;cash&quot;
+            ]
+        }
+    ],
+    &quot;per_page&quot;: 10,
+    &quot;total&quot;: 1
+}</code>
+ </pre>
+            <blockquote>
+            <p>Example response (403):</p>
+        </blockquote>
+                <pre>
+
+<code class="language-json" style="max-height: 300px;">{
+    &quot;error&quot;: {
+        &quot;message&quot;: &quot;Unauthorized action.&quot;
+    }
+}</code>
+ </pre>
+            <blockquote>
+            <p>Example response (422):</p>
+        </blockquote>
+                <pre>
+
+<code class="language-json" style="max-height: 300px;">{
+    &quot;message&quot;: &quot;The given data was invalid.&quot;,
+    &quot;errors&quot;: {
+        &quot;start_date&quot;: [
+            &quot;The start date does not match the format Y-m-d.&quot;
+        ]
+    }
+}</code>
+ </pre>
+    </span>
+<span id="execution-results-GETconnector-api-reports-sales" hidden>
+    <blockquote>Received response<span
+                id="execution-response-status-GETconnector-api-reports-sales"></span>:
+    </blockquote>
+    <pre class="json"><code id="execution-response-content-GETconnector-api-reports-sales"
+      data-empty-response-text="<Empty response>" style="max-height: 400px;"></code></pre>
+</span>
+<span id="execution-error-GETconnector-api-reports-sales" hidden>
+    <blockquote>Request failed with error:</blockquote>
+    <pre><code id="execution-error-message-GETconnector-api-reports-sales">
+
+Tip: Check that you&#039;re properly connected to the network.
+If you&#039;re a maintainer of ths API, verify that your API is running and you&#039;ve enabled CORS.
+You can check the Dev Tools console for debugging information.</code></pre>
+</span>
+<form id="form-GETconnector-api-reports-sales" data-method="GET"
+      data-path="connector/api/reports/sales"
+      data-authed="1"
+      data-hasfiles="0"
+      data-isarraybody="0"
+      autocomplete="off"
+      onsubmit="event.preventDefault(); executeTryOut('GETconnector-api-reports-sales', this);">
+    <h3>
+        Request&nbsp;&nbsp;&nbsp;
+            </h3>
+            <p>
+            <small class="badge badge-green">GET</small>
+            <b><code>connector/api/reports/sales</code></b>
+        </p>
+                <h4 class="fancy-heading-panel"><b>Headers</b></h4>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Authorization</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Authorization" class="auth-value"               data-endpoint="GETconnector-api-reports-sales"
+               value="Bearer {access_token}"
+               data-component="header">
+    <br>
+<p>Example: <code>Bearer {access_token}</code></p>
+            </div>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Content-Type</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Content-Type"                data-endpoint="GETconnector-api-reports-sales"
+               value="application/json"
+               data-component="header">
+    <br>
+<p>Example: <code>application/json</code></p>
+            </div>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Accept</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Accept"                data-endpoint="GETconnector-api-reports-sales"
+               value="application/json"
+               data-component="header">
+    <br>
+<p>Example: <code>application/json</code></p>
+            </div>
+                            <h4 class="fancy-heading-panel"><b>Query Parameters</b></h4>
+                                    <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>start_date</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+<i>optional</i> &nbsp;
+                <input type="text" style="display: none"
+                              name="start_date"                data-endpoint="GETconnector-api-reports-sales"
+               value="2026-10-01"
+               data-component="query">
+    <br>
+<p>Inclusive transaction start date (YYYY-MM-DD). Example: <code>2026-10-01</code></p>
+            </div>
+                                    <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>end_date</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+<i>optional</i> &nbsp;
+                <input type="text" style="display: none"
+                              name="end_date"                data-endpoint="GETconnector-api-reports-sales"
+               value="2026-10-31"
+               data-component="query">
+    <br>
+<p>Inclusive transaction end date (YYYY-MM-DD). Example: <code>2026-10-31</code></p>
+            </div>
+                                    <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>location_id</code></b>&nbsp;&nbsp;
+<small>integer</small>&nbsp;
+<i>optional</i> &nbsp;
+                <input type="number" style="display: none"
+               step="any"               name="location_id"                data-endpoint="GETconnector-api-reports-sales"
+               value="1"
+               data-component="query">
+    <br>
+<p>Filter to a permitted location. Example: <code>1</code></p>
+            </div>
+                                    <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>customer_id</code></b>&nbsp;&nbsp;
+<small>integer</small>&nbsp;
+<i>optional</i> &nbsp;
+                <input type="number" style="display: none"
+               step="any"               name="customer_id"                data-endpoint="GETconnector-api-reports-sales"
+               value="45"
+               data-component="query">
+    <br>
+<p>Filter by customer/contact ID. Example: <code>45</code></p>
+            </div>
+                                    <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>payment_status</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+<i>optional</i> &nbsp;
+                <input type="text" style="display: none"
+                              name="payment_status"                data-endpoint="GETconnector-api-reports-sales"
+               value="paid"
+               data-component="query">
+    <br>
+<p>Filter by due, partial, paid, or overdue. Example: <code>paid</code></p>
+            </div>
+                                    <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>per_page</code></b>&nbsp;&nbsp;
+<small>integer</small>&nbsp;
+<i>optional</i> &nbsp;
+                <input type="number" style="display: none"
+               step="any"               name="per_page"                data-endpoint="GETconnector-api-reports-sales"
+               value="25"
+               data-component="query">
+    <br>
+<p>Page size from 1 to 100. Defaults to 10. Example: <code>25</code></p>
+            </div>
+                </form>
+
+                    <h2 id="report-management-GETconnector-api-reports-sales-payments">List payments associated with sales and opening balances.</h2>
+
+<p>
+<small class="badge badge-darkred">requires authentication</small>
+</p>
+
+
+
+<span id="example-requests-GETconnector-api-reports-sales-payments">
+<blockquote>Example request:</blockquote>
+
+
+<div class="bash-example">
+    <pre><code class="language-bash">curl --request GET \
+    --get "https://pos.kheyalcafe.com/connector/api/reports/sales-payments?start_date=2026-10-01&amp;end_date=2026-10-31&amp;location_id=1&amp;customer_id=45&amp;payment_method=cash&amp;per_page=25" \
+    --header "Authorization: Bearer {access_token}" \
+    --header "Content-Type: application/json" \
+    --header "Accept: application/json"</code></pre></div>
+
+
+<div class="javascript-example">
+    <pre><code class="language-javascript">const url = new URL(
+    "https://pos.kheyalcafe.com/connector/api/reports/sales-payments"
+);
+
+const params = {
+    "start_date": "2026-10-01",
+    "end_date": "2026-10-31",
+    "location_id": "1",
+    "customer_id": "45",
+    "payment_method": "cash",
+    "per_page": "25",
+};
+Object.keys(params)
+    .forEach(key =&gt; url.searchParams.append(key, params[key]));
+
+const headers = {
+    "Authorization": "Bearer {access_token}",
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+fetch(url, {
+    method: "GET",
+    headers,
+}).then(response =&gt; response.json());</code></pre></div>
+
+
+<div class="php-example">
+    <pre><code class="language-php">$client = new \GuzzleHttp\Client();
+$url = 'https://pos.kheyalcafe.com/connector/api/reports/sales-payments';
+$response = $client-&gt;get(
+    $url,
+    [
+        'headers' =&gt; [
+            'Authorization' =&gt; 'Bearer {access_token}',
+            'Content-Type' =&gt; 'application/json',
+            'Accept' =&gt; 'application/json',
+        ],
+        'query' =&gt; [
+            'start_date' =&gt; '2026-10-01',
+            'end_date' =&gt; '2026-10-31',
+            'location_id' =&gt; '1',
+            'customer_id' =&gt; '45',
+            'payment_method' =&gt; 'cash',
+            'per_page' =&gt; '25',
+        ],
+    ]
+);
+$body = $response-&gt;getBody();
+print_r(json_decode((string) $body));</code></pre></div>
+
+</span>
+
+<span id="example-responses-GETconnector-api-reports-sales-payments">
+            <blockquote>
+            <p>Example response (200):</p>
+        </blockquote>
+                <pre>
+
+<code class="language-json" style="max-height: 300px;">{
+    &quot;current_page&quot;: 1,
+    &quot;data&quot;: [
+        {
+            &quot;id&quot;: 567,
+            &quot;amount&quot;: &quot;105.0000&quot;,
+            &quot;is_return&quot;: 0,
+            &quot;method&quot;: &quot;cash&quot;,
+            &quot;paid_on&quot;: &quot;2026-10-25 10:30:00&quot;,
+            &quot;payment_ref_no&quot;: null,
+            &quot;transaction_no&quot;: null,
+            &quot;transaction_id&quot;: 123,
+            &quot;invoice_no&quot;: &quot;INV-0123&quot;,
+            &quot;customer_id&quot;: 45,
+            &quot;customer_name&quot;: &quot;Example Customer&quot;,
+            &quot;customer_business_name&quot;: null
+        }
+    ],
+    &quot;per_page&quot;: 10,
+    &quot;total&quot;: 1
+}</code>
+ </pre>
+            <blockquote>
+            <p>Example response (403):</p>
+        </blockquote>
+                <pre>
+
+<code class="language-json" style="max-height: 300px;">{
+    &quot;error&quot;: {
+        &quot;message&quot;: &quot;Unauthorized action.&quot;
+    }
+}</code>
+ </pre>
+            <blockquote>
+            <p>Example response (422):</p>
+        </blockquote>
+                <pre>
+
+<code class="language-json" style="max-height: 300px;">{
+    &quot;message&quot;: &quot;The given data was invalid.&quot;,
+    &quot;errors&quot;: {
+        &quot;start_date&quot;: [
+            &quot;The start date does not match the format Y-m-d.&quot;
+        ]
+    }
+}</code>
+ </pre>
+    </span>
+<span id="execution-results-GETconnector-api-reports-sales-payments" hidden>
+    <blockquote>Received response<span
+                id="execution-response-status-GETconnector-api-reports-sales-payments"></span>:
+    </blockquote>
+    <pre class="json"><code id="execution-response-content-GETconnector-api-reports-sales-payments"
+      data-empty-response-text="<Empty response>" style="max-height: 400px;"></code></pre>
+</span>
+<span id="execution-error-GETconnector-api-reports-sales-payments" hidden>
+    <blockquote>Request failed with error:</blockquote>
+    <pre><code id="execution-error-message-GETconnector-api-reports-sales-payments">
+
+Tip: Check that you&#039;re properly connected to the network.
+If you&#039;re a maintainer of ths API, verify that your API is running and you&#039;ve enabled CORS.
+You can check the Dev Tools console for debugging information.</code></pre>
+</span>
+<form id="form-GETconnector-api-reports-sales-payments" data-method="GET"
+      data-path="connector/api/reports/sales-payments"
+      data-authed="1"
+      data-hasfiles="0"
+      data-isarraybody="0"
+      autocomplete="off"
+      onsubmit="event.preventDefault(); executeTryOut('GETconnector-api-reports-sales-payments', this);">
+    <h3>
+        Request&nbsp;&nbsp;&nbsp;
+            </h3>
+            <p>
+            <small class="badge badge-green">GET</small>
+            <b><code>connector/api/reports/sales-payments</code></b>
+        </p>
+                <h4 class="fancy-heading-panel"><b>Headers</b></h4>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Authorization</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Authorization" class="auth-value"               data-endpoint="GETconnector-api-reports-sales-payments"
+               value="Bearer {access_token}"
+               data-component="header">
+    <br>
+<p>Example: <code>Bearer {access_token}</code></p>
+            </div>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Content-Type</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Content-Type"                data-endpoint="GETconnector-api-reports-sales-payments"
+               value="application/json"
+               data-component="header">
+    <br>
+<p>Example: <code>application/json</code></p>
+            </div>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Accept</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Accept"                data-endpoint="GETconnector-api-reports-sales-payments"
+               value="application/json"
+               data-component="header">
+    <br>
+<p>Example: <code>application/json</code></p>
+            </div>
+                            <h4 class="fancy-heading-panel"><b>Query Parameters</b></h4>
+                                    <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>start_date</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+<i>optional</i> &nbsp;
+                <input type="text" style="display: none"
+                              name="start_date"                data-endpoint="GETconnector-api-reports-sales-payments"
+               value="2026-10-01"
+               data-component="query">
+    <br>
+<p>Inclusive payment start date (YYYY-MM-DD). Example: <code>2026-10-01</code></p>
+            </div>
+                                    <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>end_date</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+<i>optional</i> &nbsp;
+                <input type="text" style="display: none"
+                              name="end_date"                data-endpoint="GETconnector-api-reports-sales-payments"
+               value="2026-10-31"
+               data-component="query">
+    <br>
+<p>Inclusive payment end date (YYYY-MM-DD). Example: <code>2026-10-31</code></p>
+            </div>
+                                    <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>location_id</code></b>&nbsp;&nbsp;
+<small>integer</small>&nbsp;
+<i>optional</i> &nbsp;
+                <input type="number" style="display: none"
+               step="any"               name="location_id"                data-endpoint="GETconnector-api-reports-sales-payments"
+               value="1"
+               data-component="query">
+    <br>
+<p>Filter to a permitted location. Example: <code>1</code></p>
+            </div>
+                                    <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>customer_id</code></b>&nbsp;&nbsp;
+<small>integer</small>&nbsp;
+<i>optional</i> &nbsp;
+                <input type="number" style="display: none"
+               step="any"               name="customer_id"                data-endpoint="GETconnector-api-reports-sales-payments"
+               value="45"
+               data-component="query">
+    <br>
+<p>Filter by customer/contact ID. Example: <code>45</code></p>
+            </div>
+                                    <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>payment_method</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+<i>optional</i> &nbsp;
+                <input type="text" style="display: none"
+                              name="payment_method"                data-endpoint="GETconnector-api-reports-sales-payments"
+               value="cash"
+               data-component="query">
+    <br>
+<p>Filter by payment method key. Example: <code>cash</code></p>
+            </div>
+                                    <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>per_page</code></b>&nbsp;&nbsp;
+<small>integer</small>&nbsp;
+<i>optional</i> &nbsp;
+                <input type="number" style="display: none"
+               step="any"               name="per_page"                data-endpoint="GETconnector-api-reports-sales-payments"
+               value="25"
+               data-component="query">
+    <br>
+<p>Page size from 1 to 100. Defaults to 10. Example: <code>25</code></p>
+            </div>
+                </form>
+
+                    <h2 id="report-management-GETconnector-api-reports-product-sales">List product lines sold in finalized sales.</h2>
+
+<p>
+<small class="badge badge-darkred">requires authentication</small>
+</p>
+
+
+
+<span id="example-requests-GETconnector-api-reports-product-sales">
+<blockquote>Example request:</blockquote>
+
+
+<div class="bash-example">
+    <pre><code class="language-bash">curl --request GET \
+    --get "https://pos.kheyalcafe.com/connector/api/reports/product-sales?start_date=2026-10-01&amp;end_date=2026-10-31&amp;location_id=1&amp;customer_id=45&amp;category_id=4&amp;brand_id=3&amp;variation_id=18&amp;per_page=25" \
+    --header "Authorization: Bearer {access_token}" \
+    --header "Content-Type: application/json" \
+    --header "Accept: application/json"</code></pre></div>
+
+
+<div class="javascript-example">
+    <pre><code class="language-javascript">const url = new URL(
+    "https://pos.kheyalcafe.com/connector/api/reports/product-sales"
+);
+
+const params = {
+    "start_date": "2026-10-01",
+    "end_date": "2026-10-31",
+    "location_id": "1",
+    "customer_id": "45",
+    "category_id": "4",
+    "brand_id": "3",
+    "variation_id": "18",
+    "per_page": "25",
+};
+Object.keys(params)
+    .forEach(key =&gt; url.searchParams.append(key, params[key]));
+
+const headers = {
+    "Authorization": "Bearer {access_token}",
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+fetch(url, {
+    method: "GET",
+    headers,
+}).then(response =&gt; response.json());</code></pre></div>
+
+
+<div class="php-example">
+    <pre><code class="language-php">$client = new \GuzzleHttp\Client();
+$url = 'https://pos.kheyalcafe.com/connector/api/reports/product-sales';
+$response = $client-&gt;get(
+    $url,
+    [
+        'headers' =&gt; [
+            'Authorization' =&gt; 'Bearer {access_token}',
+            'Content-Type' =&gt; 'application/json',
+            'Accept' =&gt; 'application/json',
+        ],
+        'query' =&gt; [
+            'start_date' =&gt; '2026-10-01',
+            'end_date' =&gt; '2026-10-31',
+            'location_id' =&gt; '1',
+            'customer_id' =&gt; '45',
+            'category_id' =&gt; '4',
+            'brand_id' =&gt; '3',
+            'variation_id' =&gt; '18',
+            'per_page' =&gt; '25',
+        ],
+    ]
+);
+$body = $response-&gt;getBody();
+print_r(json_decode((string) $body));</code></pre></div>
+
+</span>
+
+<span id="example-responses-GETconnector-api-reports-product-sales">
+            <blockquote>
+            <p>Example response (200):</p>
+        </blockquote>
+                <pre>
+
+<code class="language-json" style="max-height: 300px;">{
+    &quot;current_page&quot;: 1,
+    &quot;data&quot;: [
+        {
+            &quot;id&quot;: 789,
+            &quot;transaction_id&quot;: 123,
+            &quot;invoice_no&quot;: &quot;INV-0123&quot;,
+            &quot;transaction_date&quot;: &quot;2026-10-25 10:30:00&quot;,
+            &quot;location_id&quot;: 1,
+            &quot;customer_id&quot;: 45,
+            &quot;customer_name&quot;: &quot;Example Customer&quot;,
+            &quot;product_id&quot;: 10,
+            &quot;product_name&quot;: &quot;Example Product&quot;,
+            &quot;sku&quot;: &quot;SKU-0010&quot;,
+            &quot;product_variation&quot;: &quot;Size&quot;,
+            &quot;variation_name&quot;: &quot;Large&quot;,
+            &quot;sub_sku&quot;: &quot;SKU-0010-L&quot;,
+            &quot;unit&quot;: &quot;Pc(s)&quot;,
+            &quot;unit_price&quot;: &quot;100.0000&quot;,
+            &quot;unit_sale_price&quot;: &quot;105.0000&quot;,
+            &quot;item_tax&quot;: &quot;5.0000&quot;,
+            &quot;sold_quantity&quot;: &quot;1.0000&quot;,
+            &quot;subtotal&quot;: &quot;105.0000&quot;
+        }
+    ],
+    &quot;per_page&quot;: 10,
+    &quot;total&quot;: 1
+}</code>
+ </pre>
+            <blockquote>
+            <p>Example response (403):</p>
+        </blockquote>
+                <pre>
+
+<code class="language-json" style="max-height: 300px;">{
+    &quot;error&quot;: {
+        &quot;message&quot;: &quot;Unauthorized action.&quot;
+    }
+}</code>
+ </pre>
+            <blockquote>
+            <p>Example response (422):</p>
+        </blockquote>
+                <pre>
+
+<code class="language-json" style="max-height: 300px;">{
+    &quot;message&quot;: &quot;The given data was invalid.&quot;,
+    &quot;errors&quot;: {
+        &quot;start_date&quot;: [
+            &quot;The start date does not match the format Y-m-d.&quot;
+        ]
+    }
+}</code>
+ </pre>
+    </span>
+<span id="execution-results-GETconnector-api-reports-product-sales" hidden>
+    <blockquote>Received response<span
+                id="execution-response-status-GETconnector-api-reports-product-sales"></span>:
+    </blockquote>
+    <pre class="json"><code id="execution-response-content-GETconnector-api-reports-product-sales"
+      data-empty-response-text="<Empty response>" style="max-height: 400px;"></code></pre>
+</span>
+<span id="execution-error-GETconnector-api-reports-product-sales" hidden>
+    <blockquote>Request failed with error:</blockquote>
+    <pre><code id="execution-error-message-GETconnector-api-reports-product-sales">
+
+Tip: Check that you&#039;re properly connected to the network.
+If you&#039;re a maintainer of ths API, verify that your API is running and you&#039;ve enabled CORS.
+You can check the Dev Tools console for debugging information.</code></pre>
+</span>
+<form id="form-GETconnector-api-reports-product-sales" data-method="GET"
+      data-path="connector/api/reports/product-sales"
+      data-authed="1"
+      data-hasfiles="0"
+      data-isarraybody="0"
+      autocomplete="off"
+      onsubmit="event.preventDefault(); executeTryOut('GETconnector-api-reports-product-sales', this);">
+    <h3>
+        Request&nbsp;&nbsp;&nbsp;
+            </h3>
+            <p>
+            <small class="badge badge-green">GET</small>
+            <b><code>connector/api/reports/product-sales</code></b>
+        </p>
+                <h4 class="fancy-heading-panel"><b>Headers</b></h4>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Authorization</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Authorization" class="auth-value"               data-endpoint="GETconnector-api-reports-product-sales"
+               value="Bearer {access_token}"
+               data-component="header">
+    <br>
+<p>Example: <code>Bearer {access_token}</code></p>
+            </div>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Content-Type</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Content-Type"                data-endpoint="GETconnector-api-reports-product-sales"
+               value="application/json"
+               data-component="header">
+    <br>
+<p>Example: <code>application/json</code></p>
+            </div>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Accept</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Accept"                data-endpoint="GETconnector-api-reports-product-sales"
+               value="application/json"
+               data-component="header">
+    <br>
+<p>Example: <code>application/json</code></p>
+            </div>
+                            <h4 class="fancy-heading-panel"><b>Query Parameters</b></h4>
+                                    <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>start_date</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+<i>optional</i> &nbsp;
+                <input type="text" style="display: none"
+                              name="start_date"                data-endpoint="GETconnector-api-reports-product-sales"
+               value="2026-10-01"
+               data-component="query">
+    <br>
+<p>Inclusive transaction start date (YYYY-MM-DD). Example: <code>2026-10-01</code></p>
+            </div>
+                                    <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>end_date</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+<i>optional</i> &nbsp;
+                <input type="text" style="display: none"
+                              name="end_date"                data-endpoint="GETconnector-api-reports-product-sales"
+               value="2026-10-31"
+               data-component="query">
+    <br>
+<p>Inclusive transaction end date (YYYY-MM-DD). Example: <code>2026-10-31</code></p>
+            </div>
+                                    <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>location_id</code></b>&nbsp;&nbsp;
+<small>integer</small>&nbsp;
+<i>optional</i> &nbsp;
+                <input type="number" style="display: none"
+               step="any"               name="location_id"                data-endpoint="GETconnector-api-reports-product-sales"
+               value="1"
+               data-component="query">
+    <br>
+<p>Filter to a permitted location. Example: <code>1</code></p>
+            </div>
+                                    <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>customer_id</code></b>&nbsp;&nbsp;
+<small>integer</small>&nbsp;
+<i>optional</i> &nbsp;
+                <input type="number" style="display: none"
+               step="any"               name="customer_id"                data-endpoint="GETconnector-api-reports-product-sales"
+               value="45"
+               data-component="query">
+    <br>
+<p>Filter by customer/contact ID. Example: <code>45</code></p>
+            </div>
+                                    <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>category_id</code></b>&nbsp;&nbsp;
+<small>integer</small>&nbsp;
+<i>optional</i> &nbsp;
+                <input type="number" style="display: none"
+               step="any"               name="category_id"                data-endpoint="GETconnector-api-reports-product-sales"
+               value="4"
+               data-component="query">
+    <br>
+<p>Filter by product category. Example: <code>4</code></p>
+            </div>
+                                    <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>brand_id</code></b>&nbsp;&nbsp;
+<small>integer</small>&nbsp;
+<i>optional</i> &nbsp;
+                <input type="number" style="display: none"
+               step="any"               name="brand_id"                data-endpoint="GETconnector-api-reports-product-sales"
+               value="3"
+               data-component="query">
+    <br>
+<p>Filter by product brand. Example: <code>3</code></p>
+            </div>
+                                    <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>variation_id</code></b>&nbsp;&nbsp;
+<small>integer</small>&nbsp;
+<i>optional</i> &nbsp;
+                <input type="number" style="display: none"
+               step="any"               name="variation_id"                data-endpoint="GETconnector-api-reports-product-sales"
+               value="18"
+               data-component="query">
+    <br>
+<p>Filter by product variation. Example: <code>18</code></p>
+            </div>
+                                    <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>per_page</code></b>&nbsp;&nbsp;
+<small>integer</small>&nbsp;
+<i>optional</i> &nbsp;
+                <input type="number" style="display: none"
+               step="any"               name="per_page"                data-endpoint="GETconnector-api-reports-product-sales"
+               value="25"
+               data-component="query">
+    <br>
+<p>Page size from 1 to 100. Defaults to 10. Example: <code>25</code></p>
+            </div>
+                </form>
+
+                    <h2 id="report-management-GETconnector-api-reports-popular-products">Rank products by units sold.</h2>
+
+<p>
+<small class="badge badge-darkred">requires authentication</small>
+</p>
+
+
+
+<span id="example-requests-GETconnector-api-reports-popular-products">
+<blockquote>Example request:</blockquote>
+
+
+<div class="bash-example">
+    <pre><code class="language-bash">curl --request GET \
+    --get "https://pos.kheyalcafe.com/connector/api/reports/popular-products?start_date=2026-10-01&amp;end_date=2026-10-31&amp;location_id=1&amp;category_id=4&amp;sub_category_id=5&amp;brand_id=3&amp;unit_id=2&amp;product_type=single&amp;limit=10" \
+    --header "Authorization: Bearer {access_token}" \
+    --header "Content-Type: application/json" \
+    --header "Accept: application/json"</code></pre></div>
+
+
+<div class="javascript-example">
+    <pre><code class="language-javascript">const url = new URL(
+    "https://pos.kheyalcafe.com/connector/api/reports/popular-products"
+);
+
+const params = {
+    "start_date": "2026-10-01",
+    "end_date": "2026-10-31",
+    "location_id": "1",
+    "category_id": "4",
+    "sub_category_id": "5",
+    "brand_id": "3",
+    "unit_id": "2",
+    "product_type": "single",
+    "limit": "10",
+};
+Object.keys(params)
+    .forEach(key =&gt; url.searchParams.append(key, params[key]));
+
+const headers = {
+    "Authorization": "Bearer {access_token}",
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+fetch(url, {
+    method: "GET",
+    headers,
+}).then(response =&gt; response.json());</code></pre></div>
+
+
+<div class="php-example">
+    <pre><code class="language-php">$client = new \GuzzleHttp\Client();
+$url = 'https://pos.kheyalcafe.com/connector/api/reports/popular-products';
+$response = $client-&gt;get(
+    $url,
+    [
+        'headers' =&gt; [
+            'Authorization' =&gt; 'Bearer {access_token}',
+            'Content-Type' =&gt; 'application/json',
+            'Accept' =&gt; 'application/json',
+        ],
+        'query' =&gt; [
+            'start_date' =&gt; '2026-10-01',
+            'end_date' =&gt; '2026-10-31',
+            'location_id' =&gt; '1',
+            'category_id' =&gt; '4',
+            'sub_category_id' =&gt; '5',
+            'brand_id' =&gt; '3',
+            'unit_id' =&gt; '2',
+            'product_type' =&gt; 'single',
+            'limit' =&gt; '10',
+        ],
+    ]
+);
+$body = $response-&gt;getBody();
+print_r(json_decode((string) $body));</code></pre></div>
+
+</span>
+
+<span id="example-responses-GETconnector-api-reports-popular-products">
+            <blockquote>
+            <p>Example response (200):</p>
+        </blockquote>
+                <pre>
+
+<code class="language-json" style="max-height: 300px;">{
+    &quot;data&quot;: [
+        {
+            &quot;total_unit_sold&quot;: &quot;25.0000&quot;,
+            &quot;product&quot;: &quot;Example Product&quot;,
+            &quot;unit&quot;: &quot;Pc(s)&quot;,
+            &quot;sku&quot;: &quot;SKU-0010&quot;
+        }
+    ],
+    &quot;chart&quot;: {
+        &quot;labels&quot;: [
+            &quot;Example Product - SKU-0010 (Pc(s))&quot;
+        ],
+        &quot;values&quot;: [
+            25
+        ]
+    }
+}</code>
+ </pre>
+            <blockquote>
+            <p>Example response (403):</p>
+        </blockquote>
+                <pre>
+
+<code class="language-json" style="max-height: 300px;">{
+    &quot;error&quot;: {
+        &quot;message&quot;: &quot;Unauthorized action.&quot;
+    }
+}</code>
+ </pre>
+            <blockquote>
+            <p>Example response (422):</p>
+        </blockquote>
+                <pre>
+
+<code class="language-json" style="max-height: 300px;">{
+    &quot;message&quot;: &quot;The given data was invalid.&quot;,
+    &quot;errors&quot;: {
+        &quot;start_date&quot;: [
+            &quot;The start date does not match the format Y-m-d.&quot;
+        ]
+    }
+}</code>
+ </pre>
+    </span>
+<span id="execution-results-GETconnector-api-reports-popular-products" hidden>
+    <blockquote>Received response<span
+                id="execution-response-status-GETconnector-api-reports-popular-products"></span>:
+    </blockquote>
+    <pre class="json"><code id="execution-response-content-GETconnector-api-reports-popular-products"
+      data-empty-response-text="<Empty response>" style="max-height: 400px;"></code></pre>
+</span>
+<span id="execution-error-GETconnector-api-reports-popular-products" hidden>
+    <blockquote>Request failed with error:</blockquote>
+    <pre><code id="execution-error-message-GETconnector-api-reports-popular-products">
+
+Tip: Check that you&#039;re properly connected to the network.
+If you&#039;re a maintainer of ths API, verify that your API is running and you&#039;ve enabled CORS.
+You can check the Dev Tools console for debugging information.</code></pre>
+</span>
+<form id="form-GETconnector-api-reports-popular-products" data-method="GET"
+      data-path="connector/api/reports/popular-products"
+      data-authed="1"
+      data-hasfiles="0"
+      data-isarraybody="0"
+      autocomplete="off"
+      onsubmit="event.preventDefault(); executeTryOut('GETconnector-api-reports-popular-products', this);">
+    <h3>
+        Request&nbsp;&nbsp;&nbsp;
+            </h3>
+            <p>
+            <small class="badge badge-green">GET</small>
+            <b><code>connector/api/reports/popular-products</code></b>
+        </p>
+                <h4 class="fancy-heading-panel"><b>Headers</b></h4>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Authorization</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Authorization" class="auth-value"               data-endpoint="GETconnector-api-reports-popular-products"
+               value="Bearer {access_token}"
+               data-component="header">
+    <br>
+<p>Example: <code>Bearer {access_token}</code></p>
+            </div>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Content-Type</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Content-Type"                data-endpoint="GETconnector-api-reports-popular-products"
+               value="application/json"
+               data-component="header">
+    <br>
+<p>Example: <code>application/json</code></p>
+            </div>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Accept</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Accept"                data-endpoint="GETconnector-api-reports-popular-products"
+               value="application/json"
+               data-component="header">
+    <br>
+<p>Example: <code>application/json</code></p>
+            </div>
+                            <h4 class="fancy-heading-panel"><b>Query Parameters</b></h4>
+                                    <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>start_date</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+<i>optional</i> &nbsp;
+                <input type="text" style="display: none"
+                              name="start_date"                data-endpoint="GETconnector-api-reports-popular-products"
+               value="2026-10-01"
+               data-component="query">
+    <br>
+<p>Inclusive sale start date (YYYY-MM-DD). Example: <code>2026-10-01</code></p>
+            </div>
+                                    <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>end_date</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+<i>optional</i> &nbsp;
+                <input type="text" style="display: none"
+                              name="end_date"                data-endpoint="GETconnector-api-reports-popular-products"
+               value="2026-10-31"
+               data-component="query">
+    <br>
+<p>Inclusive sale end date (YYYY-MM-DD). Example: <code>2026-10-31</code></p>
+            </div>
+                                    <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>location_id</code></b>&nbsp;&nbsp;
+<small>integer</small>&nbsp;
+<i>optional</i> &nbsp;
+                <input type="number" style="display: none"
+               step="any"               name="location_id"                data-endpoint="GETconnector-api-reports-popular-products"
+               value="1"
+               data-component="query">
+    <br>
+<p>Filter to a permitted location. Example: <code>1</code></p>
+            </div>
+                                    <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>category_id</code></b>&nbsp;&nbsp;
+<small>integer</small>&nbsp;
+<i>optional</i> &nbsp;
+                <input type="number" style="display: none"
+               step="any"               name="category_id"                data-endpoint="GETconnector-api-reports-popular-products"
+               value="4"
+               data-component="query">
+    <br>
+<p>Filter by product category. Example: <code>4</code></p>
+            </div>
+                                    <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>sub_category_id</code></b>&nbsp;&nbsp;
+<small>integer</small>&nbsp;
+<i>optional</i> &nbsp;
+                <input type="number" style="display: none"
+               step="any"               name="sub_category_id"                data-endpoint="GETconnector-api-reports-popular-products"
+               value="5"
+               data-component="query">
+    <br>
+<p>Filter by product subcategory. Example: <code>5</code></p>
+            </div>
+                                    <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>brand_id</code></b>&nbsp;&nbsp;
+<small>integer</small>&nbsp;
+<i>optional</i> &nbsp;
+                <input type="number" style="display: none"
+               step="any"               name="brand_id"                data-endpoint="GETconnector-api-reports-popular-products"
+               value="3"
+               data-component="query">
+    <br>
+<p>Filter by product brand. Example: <code>3</code></p>
+            </div>
+                                    <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>unit_id</code></b>&nbsp;&nbsp;
+<small>integer</small>&nbsp;
+<i>optional</i> &nbsp;
+                <input type="number" style="display: none"
+               step="any"               name="unit_id"                data-endpoint="GETconnector-api-reports-popular-products"
+               value="2"
+               data-component="query">
+    <br>
+<p>Filter by product unit. Example: <code>2</code></p>
+            </div>
+                                    <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>product_type</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+<i>optional</i> &nbsp;
+                <input type="text" style="display: none"
+                              name="product_type"                data-endpoint="GETconnector-api-reports-popular-products"
+               value="single"
+               data-component="query">
+    <br>
+<p>Filter by single, variable, or combo. Example: <code>single</code></p>
+            </div>
+                                    <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>limit</code></b>&nbsp;&nbsp;
+<small>integer</small>&nbsp;
+<i>optional</i> &nbsp;
+                <input type="number" style="display: none"
+               step="any"               name="limit"                data-endpoint="GETconnector-api-reports-popular-products"
+               value="10"
+               data-component="query">
+    <br>
+<p>Number of ranked products from 1 to 100. Defaults to 5. Example: <code>10</code></p>
+            </div>
+                </form>
+
+<h1 id="sales-management">Sales management</h1>
 
     
 
